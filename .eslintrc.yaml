@@ -1,0 +1,51 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": [
+      "@typescript-eslint",
+      "prettier",
+      "import"
+  ],
+  "rules": {
+    "semi": [ "error", "always" ],
+    "quotes": [ "error", "single", { "avoidEscape": true, "allowTemplateLiterals": true } ],
+    "linebreak-style": "warn",
+    "max-len": [ "error", { "code": 120, "ignoreStrings": true, "ignoreComments": true } ],
+    "react/tsx-indent-props": [ "off", 4 ],
+    "indent": [ "error", 4, { "SwitchCase": 1 } ],
+    "prettier/prettier": [ "error", { "endOfLine": "lf", "singleQuote": true, "quoteProps": "preserve" } ],
+    "import/order": [
+        "error",
+      {
+        "groups": [
+            "builtin",
+            "external",
+            "internal",
+            [ "parent", "sibling", "index" ],
+            "object"
+        ],
+        "newlines-between": "always",
+        "warnOnUnassignedImports": false,
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "internal",
+            "position": "before"
+          }
+        ]
+      }
+    ]
+  }
+}
