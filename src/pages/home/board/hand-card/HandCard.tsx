@@ -9,7 +9,7 @@ import type { ICard } from '@/card.types';
 
 interface Props {
   card: ICard;
-  onClick: () => void;
+  onClick?: () => void;
   isDisabled?: boolean;
   isHided?: boolean;
   style?: CSSProperties;
@@ -40,10 +40,11 @@ export function HandCard({
   return (
     <motion.button
       className={cn(
-        'h-[8.5rem] w-24 inline-block -ml-7 rounded-lg cursor-pointer will-change-transform',
+        'h-[8.5rem] w-24 inline-block -ml-6  rounded-lg  will-change-transform relative ',
         {
-          shadow: !isHided,
-          'opacity-50': isDisabled
+         ' shadow ' : !isHided,
+         'cursor-pointer' : !isHided && !isDisabled 
+    
         }
       )}
       style={style}
@@ -63,6 +64,7 @@ export function HandCard({
       }
       transition={{ type:'just', stiffness: 230, damping: 32 }}
     >
+      {isDisabled && (<div className='absolute top-0 left-0 w-full h-full bg-black/60 z-[1] rounded-lg' />) }
       <img
         src={isHided ? '/src/assets/cards/cover.png' : card.imageUrl}
         alt={card.name}
