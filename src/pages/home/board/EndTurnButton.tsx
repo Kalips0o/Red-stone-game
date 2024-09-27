@@ -3,7 +3,9 @@ import { useGameStore } from "@/store/game/game.store";
 
 export function EndTurnButton() {
     const {endTurn} = useGameStore()
-    return <Button variant='primary' className="absolute  right-4 z-10" onClick={endTurn}>
+    return <Button variant='primary' className="absolute  right-4 z-10" onClick={endTurn} style={{
+        top: -29.25
+    }}>
      End Turn
     </Button>
 }

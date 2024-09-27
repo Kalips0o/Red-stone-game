@@ -20,5 +20,9 @@ export const attackHeroAction = (state: IGameStore, attackerId: number): Partial
 		}
 	}
 
-	return {player: state.player, opponent: state.opponent, isGameOver: state.isGameOver}
+	return {player: state.player,
+		 opponent: state.opponent,
+		  isGameOver: state.isGameOver,
+		  isGameStarted:false
+		}
 }

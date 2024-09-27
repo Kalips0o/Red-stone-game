@@ -5,6 +5,7 @@ import { createDeck } from './create-deck'
 import { type IGameStore, type IHero } from './game.types'
 import { attackCardAction } from './actions/atack-card'
 import { attackHeroAction } from './actions/hero-atack'
+import { returnCardAction } from './actions/return-card'
 
 
 const initialPlayerData: IHero = {
@@ -29,12 +30,16 @@ const useGameStore = create<IGameStore>((set, get) => ({
 	playCard: (cardId: number) => {
 		set((state) => playCardAction(state, cardId))
 	},
+    returnCard: (cardId: number) => {
+		set((state) => returnCardAction(state, cardId))
+	},
 	attackCard: (attackerId: number, targetId: number) => {
 		set((state) => attackCardAction(state, attackerId, targetId))
 	},	
 	attackHero: (attackerId: number) => {
 		set((state) => attackHeroAction(state, attackerId))
 	},					
+	resetGameOver: () => set({ isGameOver: false }),
 }))
 
 export { useGameStore }

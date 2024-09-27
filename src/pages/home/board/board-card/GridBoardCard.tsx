@@ -6,7 +6,7 @@ interface Props {
 }
 export function GridBoardCards ({deck}:Props){
 return   (
-<div className="py-4 px-20 flex items-center justify-center gap-2">
+<div className=" px-20 flex items-center justify-center gap-2">
 {deck
 .filter(card => card.isOnBoard)
   .map(card => (
