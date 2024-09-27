@@ -1,4 +1,4 @@
-import { MAX_HAND_CARDS, MAX_MANA } from "@/constants/game/core.constants";
+import { MAX_MANA } from "@/constants/game/core.constants";
 import {useGameStore} from "../../../store/game/game.store";
 import { GridBoardCards } from "./board-card/GridBoardCard";
 import { HandCard } from "./hand-card/HandCard";
@@ -25,8 +25,7 @@ export function GameBoard() {
           <div className="-top-12 absolute w-full">
             <div className="flex items-center justify-center">
               {opponent.deck
-                .filter(card => !card.isOnBoard)
-                .slice(0, MAX_HAND_CARDS)
+                .filter(card => card.isOnHand)
                 .map((card, index, array) => (
                   <HandCard
                     key={card.id}
@@ -66,8 +65,7 @@ style={{
         <div className="-bottom-10 absolute w-full">
           <div className="flex items-center justify-center">
             {player.deck
-              .filter(card => !card.isOnBoard)
-              .slice(0, MAX_HAND_CARDS)
+              .filter(card => card.isOnHand)
               .map((card, index, array) => (
                 <HandCard
                   key={card.id}

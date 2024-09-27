@@ -5,7 +5,9 @@ export function createDeck(): IGameCard[] {
     return CARDS.map((card, index) => ({
         ...card,
         id: (index + 1),
+        isTaken: false,
         isOnBoard: false,
         isCanAttack: false,
+        isOnHand: false,
     }))
 }

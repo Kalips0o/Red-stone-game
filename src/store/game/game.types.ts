@@ -4,6 +4,8 @@ export type TPlayer = 'player' | 'opponent'
 
 export interface IGameCard extends ICard {
 	id: number
+	isTaken: boolean
+	isOnHand: boolean
 	isOnBoard: boolean
 	isCanAttack: boolean
 }
@@ -14,13 +16,8 @@ export interface IHero {
 	mana: number
 }
 
-export interface IGameStore {
-	isGameStarted: boolean
-	player: IHero
-	opponent: IHero
-	currentTurn: TPlayer
-	isGameOver: boolean
-	startGame: () => void
+export interface IGameFnStore {
+startGame: () => void
 	endTurn: () => void
 	playCard: (cardId: number) => void
 	returnCard: (cardId: number) => void
@@ -28,3 +25,13 @@ export interface IGameStore {
 	attackHero: (attackerId: number) => void
 	resetGameOver: () => void
 }
+
+export interface IGameStore extends IGameFnStore {
+	isGameStarted: boolean
+	isGameOver: boolean
+	player: IHero
+	opponent: IHero
+	currentTurn: TPlayer
+	turn: number
+}
+

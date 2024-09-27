@@ -7,9 +7,9 @@ export const attackHeroAction = (state: IGameStore, attackerId: number): Partial
 	const isAttackerPlayer = state.currentTurn === 'player'
 	const opponent = state[isAttackerPlayer ? 'opponent' : 'player']
 	
-	const attacker = getCardById(attackerId.toString(), isAttackerPlayer ? state.opponent.deck : state.player.deck) 
+	const attacker = getCardById(attackerId.toString(), isAttackerPlayer ?  state.player.deck :state.opponent.deck) 
 
-	const opponentTaunt = opponent.deck.find(card => card.type === EnumTypeCard.taunt)
+	const opponentTaunt = opponent.deck.find(card => card.type === EnumTypeCard.taunt && card.isOnBoard)
 
 	if(attacker && attacker.isCanAttack && !opponentTaunt) {
 		opponent.health -= attacker.attack
