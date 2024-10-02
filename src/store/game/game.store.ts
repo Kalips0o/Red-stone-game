@@ -17,16 +17,16 @@ const useGameStore = create<IGameStore>((set, get) => ({
 
 	startGame: () => set(startGameAction()),
 	endTurn: () => set(endTurnAction(get)),
-	playCard: (cardId: number) => {
+	playCard: (cardId: string) => {
 		set((state) => playCardAction(state, cardId))
 	},
-    returnCard: (cardId: number) => {
+    returnCard: (cardId: string) => {
 		set((state) => returnCardAction(state, cardId))
 	},
-	attackCard: (attackerId: number, targetId: number) => {
+	attackCard: (attackerId: string, targetId: string) => {
 		set((state) => attackCardAction(state, attackerId, targetId))
 	},	
-	attackHero: (attackerId: number) => {
+	attackHero: (attackerId: string) => {
 		set((state) => attackHeroAction(state, attackerId))
 	},					
 

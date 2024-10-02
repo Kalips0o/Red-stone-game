@@ -2,13 +2,12 @@ import { create } from "zustand"
 
 
 interface IUseSelectAttacker {
-    cardAttackerId: number | null
-    setCardAttackerId: (id: number | null) => void
+    cardAttackerId: string | null
+    setCardAttackerId: (cardId: string | null) => void
 }
 
 
-export const useSellectAttacker = create<IUseSelectAttacker>((set,) => ({
+export const useSelectAttacker = create<IUseSelectAttacker>(set => ({
     cardAttackerId: null,
     setCardAttackerId: cardId => set({ cardAttackerId: cardId })
-
 }))

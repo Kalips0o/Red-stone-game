@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import cn from 'clsx';
 import { useGameStore } from "@/store/game/game.store";
 import { useEnemyTarget } from "./useEnemyTarget";
-import { useSellectAttacker } from "@/store/game/actions/select-attacker";
+import { useSelectAttacker } from "@/store/game/actions/select-attacker";
+import { DamageList } from "../DamageList";
 
 interface Props {
   card: IGameCard;
@@ -11,34 +12,32 @@ interface Props {
 }
 
 export function BoardCard({ card, isPlayerSide }: Props) {
-  const {returnCard, currentTurn} = useGameStore()
-  const {handleSelectTarget} = useEnemyTarget()
-  const {setCardAttackerId, cardAttackerId} = useSellectAttacker()
 
-  const handleClick = (cardId: number) => {
-  
-   if(isPlayerSide){
-    if(card.isCanAttack){
-      setCardAttackerId(cardId)
-    }
-    else if (card.isPlayedThisTurn){
-      returnCard(cardId)
-    }
-    else {
-      handleSelectTarget(cardId)
-    }
-   }
+  const {handleSelectTarget} = useEnemyTarget()
+  const {returnCard, currentTurn} = useGameStore()
+  const {setCardAttackerId, cardAttackerId} = useSelectAttacker()
+
+  const handleClick = (cardId: string) => {
+  if(isPlayerSide){
+  if(card.isCanAttack){
+    setCardAttackerId(cardId)
   }
+  else if (card.isPlayedThisTurn){
+    returnCard(cardId)
+  }
+  else {
+    handleSelectTarget(cardId)
+  }
+}}
 
   const isSelectPlayerAttacker = isPlayerSide && cardAttackerId === card.id
   
   return (
     <motion.button
-      className={cn("h-[11.3rem] w-32 rounded-lg border-2 border-transparent border-solid transition-colors", {
-      
-    
+      className={cn("h-[11.3rem] w-32 rounded-lg border-2 border-transparent border-solid transition-colors relative", 
+        {
 
-        '!border-green-400 shadow-2xl':
+        'cursor-pointer !border-green-400 shadow-2xl':
         card.isCanAttack &&
         !isSelectPlayerAttacker && 
         isPlayerSide &&
@@ -56,9 +55,13 @@ export function BoardCard({ card, isPlayerSide }: Props) {
         opacity: 1,
       }}
       transition={{ type: 'spring', stiffness: 150, damping: 20, mass: 1 }}
-      onClick={()=> currentTurn !== 'player' ? null : handleClick(card.id)}
+      onClick={()=>(currentTurn !== 'player' ? null : handleClick(card.id))}
     >
       <img alt={card.name} src={card.imageUrl} draggable="false" />
+
+
+      <DamageList id={card.id} isRight/>
+
     </motion.button>
   );
 }

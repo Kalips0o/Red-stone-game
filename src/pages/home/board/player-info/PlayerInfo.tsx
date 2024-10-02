@@ -4,8 +4,9 @@ import type { IHero, TPlayer } from '@/store/game/game.types';
 import cn from 'clsx';
 import { useEnemyTarget } from '../board-card/useEnemyTarget';
 import { useGameStore } from '@/store/game/game.store';
-import { useSellectAttacker } from '@/store/game/actions/select-attacker';
+import { useSelectAttacker } from '@/store/game/actions/select-attacker';
 import { EnumTypeCard } from '@/card.types';
+import { DamageList } from '../DamageList';
 
 interface Props {
   player: Omit<IHero, 'deck'>;
@@ -13,13 +14,17 @@ interface Props {
 }
 
 export function PlayerInfo({ player, typePlayer }: Props) {
-  const {cardAttackerId}=useSellectAttacker()
+  const {cardAttackerId}=useSelectAttacker()
+   const {handleSelectTarget} = useEnemyTarget()
   const {currentTurn, opponent} = useGameStore()
-  const {handleSelectTarget} = useEnemyTarget()
+
+  const opponentTaunt = opponent.deck.find(
+    card => card.type === EnumTypeCard.taunt && card.isOnBoard
+  )
 
   const isPlayer = typePlayer === 'player';
 
-  const opponentTaunt = opponent.deck.find(card => card.type === EnumTypeCard.taunt && card.isOnBoard)
+ 
 
   return (
     <button
@@ -28,8 +33,10 @@ export function PlayerInfo({ player, typePlayer }: Props) {
         'right-10 top-1': !isPlayer,
         '!border-red-400': !isPlayer && cardAttackerId && !opponentTaunt
       })}
+
       disabled={isPlayer || currentTurn === "opponent"}
-      onClick={()=>isPlayer ? null :handleSelectTarget(undefined, true)}
+
+      onClick={()=>isPlayer ? null : handleSelectTarget(undefined, true)}
     >
       <img 
       width={200}
@@ -39,9 +46,13 @@ export function PlayerInfo({ player, typePlayer }: Props) {
     <div className={cn('absolute  w-full flex justify-center items-center', 
  isPlayer ? 'bottom-2.5' : '-bottom-1'
     )}>
+
+
       <Badge value={player.health}   color='red'  maxValue={MAX_HP} />
       </div>
-  
+
+  <DamageList id={typePlayer} isRight={isPlayer}/>
+
       </button>
   );
 }
