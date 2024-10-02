@@ -5,7 +5,7 @@ import styles from './Button.module.scss'
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	children: ReactNode
-	variant: 'primary' | 'secondary' | 'gray' | 'disabled'
+	variant?: 'primary' | 'secondary' | 'gray' | 'disabled'
 	isCircle?: boolean
 }
 

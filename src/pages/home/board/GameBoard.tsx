@@ -40,7 +40,7 @@ export function GameBoard() {
           </div>
         </div>
 
-         <GridBoardCards deck={opponent.deck} />
+         <GridBoardCards deck={opponent.deck} isPlayerSide={false} />
       </SectionSide>
 
 
@@ -55,7 +55,7 @@ style={{
 
       <SectionSide isPlayer>
 
-      <GridBoardCards deck={player.deck} />
+      <GridBoardCards deck={player.deck} isPlayerSide={true} />
       
         <PlayerInfo player={player} typePlayer="player" />
 

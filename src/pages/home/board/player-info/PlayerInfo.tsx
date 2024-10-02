@@ -2,6 +2,10 @@ import { Badge } from '@/components/ui/Badge';
 import { MAX_HP } from '@/constants/game/core.constants';
 import type { IHero, TPlayer } from '@/store/game/game.types';
 import cn from 'clsx';
+import { useEnemyTarget } from '../board-card/useEnemyTarget';
+import { useGameStore } from '@/store/game/game.store';
+import { useSellectAttacker } from '@/store/game/actions/select-attacker';
+import { EnumTypeCard } from '@/card.types';
 
 interface Props {
   player: Omit<IHero, 'deck'>;
@@ -9,13 +13,23 @@ interface Props {
 }
 
 export function PlayerInfo({ player, typePlayer }: Props) {
+  const {cardAttackerId}=useSellectAttacker()
+  const {currentTurn, opponent} = useGameStore()
+  const {handleSelectTarget} = useEnemyTarget()
+
   const isPlayer = typePlayer === 'player';
+
+  const opponentTaunt = opponent.deck.find(card => card.type === EnumTypeCard.taunt && card.isOnBoard)
+
   return (
-    <div
-   className={cn('absolute', {
+    <button
+   className={cn('absolute z-[1] border-2 border-transparent  transition-colors', {
         'left-9 -bottom-1': isPlayer,
         'right-10 top-1': !isPlayer,
+        '!border-red-400': !isPlayer && cardAttackerId && !opponentTaunt
       })}
+      disabled={isPlayer || currentTurn === "opponent"}
+      onClick={()=>isPlayer ? null :handleSelectTarget(undefined, true)}
     >
       <img 
       width={200}
@@ -28,6 +42,6 @@ export function PlayerInfo({ player, typePlayer }: Props) {
       <Badge value={player.health}   color='red'  maxValue={MAX_HP} />
       </div>
   
-      </div>
+      </button>
   );
 }

@@ -8,6 +8,7 @@ export interface IGameCard extends ICard {
 	isOnHand: boolean
 	isOnBoard: boolean
 	isCanAttack: boolean
+	isPlayedThisTurn: boolean
 }
 
 export interface IHero {
@@ -23,7 +24,7 @@ startGame: () => void
 	returnCard: (cardId: number) => void
 	attackCard: (attackerId: number, targetId: number) => void
 	attackHero: (attackerId: number) => void
-	resetGameOver: () => void
+
 }
 
 export interface IGameStore extends IGameFnStore {

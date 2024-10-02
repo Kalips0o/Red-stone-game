@@ -14,6 +14,7 @@ import { startGameAction } from './actions/start-game/start-game'
 const useGameStore = create<IGameStore>((set, get) => ({
 	...initialGameData,
 	isGameStarted: false,
+
 	startGame: () => set(startGameAction()),
 	endTurn: () => set(endTurnAction(get)),
 	playCard: (cardId: number) => {
@@ -28,7 +29,7 @@ const useGameStore = create<IGameStore>((set, get) => ({
 	attackHero: (attackerId: number) => {
 		set((state) => attackHeroAction(state, attackerId))
 	},					
-	resetGameOver: () => set({ isGameOver: false }),
+
 }))
 
 export { useGameStore }

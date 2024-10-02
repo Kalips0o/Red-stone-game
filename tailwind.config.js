@@ -4,7 +4,7 @@ import plugin from 'tailwindcss/plugin'
 import { COLORS } from './src/constants/color.constants'
 
 export default {
-	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx,scss}'],
 	theme: {
 		extend: {
 			colors: COLORS,

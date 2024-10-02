@@ -1,6 +1,7 @@
 import { MAX_MANA } from "@/constants/game/core.constants";
 import type { IGameCard, IGameStore, TPlayer } from "../game.types";
 import { drawCardsAction } from "./draw-cards";
+import { useNotificationStore } from "@/store/notiffication/notification.store";
 
 const getNewMana = (newTurn:TPlayer, currentTurn:number)=>{
     return newTurn === "player"
@@ -9,9 +10,10 @@ const getNewMana = (newTurn:TPlayer, currentTurn:number)=>{
     
 }
 
-const updateAttack = (deck: IGameCard[])=>deck.map((card)=>({
+const updateCardOnTheEndTurn = (deck: IGameCard[])=>deck.map((card)=>({
     ...card,
-    isCanAttack: card.isOnBoard
+    isCanAttack: card.isOnBoard,
+    isPlayedThisTurn: false
 }))
 
 export const endTurnAction = (get: () => IGameStore):Partial <IGameStore >=> {
@@ -22,18 +24,22 @@ export const endTurnAction = (get: () => IGameStore):Partial <IGameStore >=> {
     const newOpponentMana = getNewMana('opponent', state.turn);
 
   
-  
+    if(newTurn === 'player'){
+      useNotificationStore.getState().show('Your turn')
+    }
+
+
     return {
       currentTurn: newTurn,
       player: {
         ...state.player,
         mana: newPlayerMana,
-        deck: updateAttack(newTurn === 'player' ? drawCardsAction(state).updatedDeck : state.player.deck)
+        deck: updateCardOnTheEndTurn(newTurn === 'player' ? drawCardsAction(state).updatedDeck : state.player.deck)
       },
       opponent: {
         ...state.opponent,
         mana: newOpponentMana,
-        deck: updateAttack(newTurn === 'opponent' ? drawCardsAction(state).updatedDeck : state.opponent.deck)
+        deck: updateCardOnTheEndTurn(newTurn === 'opponent' ? drawCardsAction(state).updatedDeck : state.opponent.deck)
       },
        turn: state.turn + 1,
     };
