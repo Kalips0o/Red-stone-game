@@ -34,6 +34,6 @@ export interface IGameStore extends IGameFnStore {
 	isGameStarted: boolean
 	isGameOver: boolean
 	currentTurn: TPlayer
-	turn: string
+	turn: number
 }
 

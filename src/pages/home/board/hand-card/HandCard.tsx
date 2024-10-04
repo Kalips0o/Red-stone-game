@@ -25,15 +25,15 @@ export function HandCard({
   isHided,
   style,
   index,
-  arrayLength
+  arrayLength,
 }: Props) {
 
-  const {currentTurn} = useGameStore()
+  const {currentTurn, player} = useGameStore()
   const [isHovered, setIsHovered] = useState(false);
 
   const { rotate, translateY } = getStyleRotation(index, arrayLength, !isHided);
 
-  const isDisabledButton= isDisabled || (currentTurn !=='player' && isHided)
+  const isDisabledButton= isDisabled || (currentTurn !=='player' && !isHided)
 
   const initialAnimation = {
     scale: 1,
@@ -47,10 +47,12 @@ export function HandCard({
       className={cn(
         'h-[8.5rem] w-24 inline-block -ml-6  rounded-lg  will-change-transform relative ',
         {
-         ' shadow ' : !isHided,
-         'cursor-pointer' : !isHided && !isDisabledButton
-    
-        }
+         ' shadow -ml-7' : !isHided,
+         '-ml-[2.15rem]' : isHided,
+         'cursor-pointer' : !isHided && !isDisabledButton,
+         'border-green-400' :
+          !isHided && currentTurn === 'player' && player.mana >= card.mana
+          }
       )}
       style={style}
       disabled={isDisabledButton}
@@ -69,7 +71,8 @@ export function HandCard({
       }
       transition={{ type:'just', stiffness: 230, damping: 32 }}
     >
-      {isDisabledButton && (<div className='absolute top-0 left-0 w-full h-full bg-black/60 z-[1] rounded-lg' />) }
+      {isDisabledButton && (
+        <div className='absolute top-0 left-0 w-full h-full bg-black/60 z-[1] rounded-lg' />) }
       <img
         src={isHided ? '/src/assets/cards/cover.png' : card.imageUrl}
         alt={card.name}

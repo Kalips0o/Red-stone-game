@@ -1,21 +1,31 @@
 import { type IGameStore } from "../game.types";
 
+// Экшен для возврата карты в руку
 export const returnCardAction = (
-    state:IGameStore, 
-    cardId:string
-):Partial<IGameStore> => {
+    state: IGameStore, 
+    cardId: string
+): Partial<IGameStore> => {
 
-  const currentPlayer = state.currentTurn === "player" ? state.player : state.opponent;
+    // Определяем текущего игрока, в зависимости от того, чей сейчас ход (игрок или противник)
+    const currentPlayer = state.currentTurn === "player" ? state.player : state.opponent;
 
-   const currentCard = currentPlayer.deck.find(card => card.id === cardId);
+    // Находим карту в колоде текущего игрока по её id
+    const currentCard = currentPlayer.deck.find(card => card.id === cardId);
 
-   if (currentCard && currentCard.isOnBoard) {
-    currentCard.isOnBoard=false
-    currentCard.isOnHand=true
-    currentPlayer.mana += currentCard.mana
+    // Если карта найдена и находится на игровом поле (isOnBoard = true)
+    if (currentCard && currentCard.isOnBoard) {
+        // Убираем карту с поля (isOnBoard = false)
+        currentCard.isOnBoard = false;
+
+        // Возвращаем карту в руку (isOnHand = true)
+        currentCard.isOnHand = true;
+
+        // Возвращаем ману игроку за эту карту
+        currentPlayer.mana += currentCard.mana;
     }
 
+    // Возвращаем обновленное состояние игрока в зависимости от того, чей это ход
     return state.currentTurn === 'player' 
-    ?  {player:currentPlayer} 
-    : {opponent:currentPlayer}
+        ? { player: currentPlayer } 
+        : { opponent: currentPlayer };
 }

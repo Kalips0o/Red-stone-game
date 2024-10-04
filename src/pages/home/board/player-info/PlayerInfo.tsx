@@ -28,15 +28,15 @@ export function PlayerInfo({ player, typePlayer }: Props) {
 
   return (
     <button
-   className={cn('absolute z-[1] border-2 border-transparent  transition-colors', {
+   className={cn('absolute z-[1] border-2 border-transparent  transition-colors rounded-xl cursor-default', {
         'left-9 -bottom-1': isPlayer,
         'right-10 top-1': !isPlayer,
-        '!border-red-400': !isPlayer && cardAttackerId && !opponentTaunt
+        '!border-red-400 !cursor-pointer': !isPlayer && cardAttackerId && !opponentTaunt
       })}
 
       disabled={isPlayer || currentTurn === "opponent"}
 
-      onClick={()=>isPlayer ? null : handleSelectTarget(undefined, true)}
+      onClick={()=>isPlayer ? null : handleSelectTarget(typePlayer, true)}
     >
       <img 
       width={200}
