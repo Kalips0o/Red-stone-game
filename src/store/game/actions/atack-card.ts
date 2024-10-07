@@ -5,79 +5,53 @@ export const getCardById = (cardId: string, deck: IGameCard[]) =>
   deck.find(card => card.id === cardId);
 
 export const attackCardAction = (
-  state: IGameStore, // Состояние игры
-  targetId: string, // ID карты-цели
-  attackerId: string // ID карты-атакующего
+  state: IGameStore,
+  attackerId: string,
+  targetId: string
 ) => {
-
-  const isAttackerPlayer = state.currentTurn === 'player'; 
-
-  // Логируем состояния колод перед атакой
-  console.log('Колода игрока:', state.player.deck);
-  console.log('Колода противника:', state.opponent.deck);
-
-  // Получаем атакующую карту
+  const isAttackerPlayer = state.currentTurn === 'player';
   const attacker = getCardById(
     attackerId,
-    isAttackerPlayer ? state.player.deck : state.opponent.deck // Атакующая карта ищется в колоде игрока или противника
+    isAttackerPlayer ? state.player.deck : state.opponent.deck
   );
-
-  // Получаем карту-цель
   const target = getCardById(
     targetId,
-    isAttackerPlayer ? state.opponent.deck : state.player.deck // Цель ищется в колоде противника или игрока
+    isAttackerPlayer ? state.opponent.deck : state.player.deck
   );
 
-
-  // Логируем информацию об атакующей и целевой картах
-  console.log(`Атакующая карта: ${attacker ? attacker.name : 'Не найдена'}, ID: ${attackerId}`);
-  console.log(`Целевая карта: ${target ? target.name : 'Не найдена'}, ID: ${targetId}`);
-
-  // Проверка: если атакующая карта и цель существуют и атакующая карта может атаковать
   if (attacker && target && attacker.isCanAttack) {
-    // Логируем информацию о здоровье перед атакой
-    console.log(`Здоровье атакующей карты до атаки: ${attacker.health}`);
-    console.log(`Здоровье целевой карты до атаки: ${target.health}`);
+    // Наносим урон
+    target.health -= attacker.attack;
+    attacker.health -= target.attack;
 
-    target.health -= attacker.attack; // Уменьшаем здоровье цели на величину атаки
-    attacker.health -= target.attack; // Атакующий также получает урон от цели
+    // Отмечаем, что атакующая карта больше не может атаковать в этом ходу
+    attacker.isCanAttack = false;
 
-    attacker.isCanAttack = false; // После атаки карта больше не может атаковать в этот ход
-
-    // Добавляем урон для отображения на экране (используем damage store)
+    // Добавляем урон для отображения на экране
     useDamageStore.getState().addDamage(targetId, attacker.attack);
     useDamageStore.getState().addDamage(attackerId, target.attack);
 
-    // Логируем информацию о здоровье после атаки
-    console.log(`Здоровье атакующей карты после атаки: ${attacker.health}`);
-    console.log(`Здоровье целевой карты после атаки: ${target.health}`);
+    // Функция для удаления карты из колоды
+    const removeCardFromDeck = (deck: IGameCard[], cardId: string) => 
+      deck.filter(card => card.id !== cardId);
 
-   
+    // Проверяем и удаляем карты с нулевым или отрицательным здоровьем
+    if (target.health <= 0) {
+      if (isAttackerPlayer) {
+        state.opponent.deck = removeCardFromDeck(state.opponent.deck, targetId);
+      } else {
+        state.player.deck = removeCardFromDeck(state.player.deck, targetId);
+      }
+    }
 
-if(target.health <= 0) {
-if(isAttackerPlayer) {
-state.opponent.deck=state.opponent.deck.filter(card => card.id !== targetId)
-} else {
-  state.player.deck=state.player.deck.filter(card => card.id !== targetId
-  )
-}
-}
-
-
-
-if(attacker.health <= 0) {
-  if(isAttackerPlayer) {
-  state.player.deck=state.player.deck.filter(card => card.id !== attackerId)
-  } else {
-    state.opponent.deck=state.opponent.deck.filter(card => card.id !== attackerId
-    )
-  }
-  }
-  
+    if (attacker.health <= 0) {
+      if (isAttackerPlayer) {
+        state.player.deck = removeCardFromDeck(state.player.deck, attackerId);
+      } else {
+        state.opponent.deck = removeCardFromDeck(state.opponent.deck, attackerId);
+      }
+    }
 
   }
-    
 
-  // Возвращаем обновленное состояние игроков
-  return { player: state.player, opponent: state.opponent };
-}
+  return { player: state.player, opponent: state.opponent };}

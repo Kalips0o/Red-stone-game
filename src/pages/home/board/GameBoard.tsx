@@ -13,11 +13,11 @@ export function GameBoard() {
 
   return (
     <div
-      className="relative h-screen w-full"
+      className="relative h-screen w-full bg-image"
      
     >
       <SectionSide isPlayer={false}>
-        <div>
+        <div >
           <PlayerInfo player={opponent} typePlayer="opponent" />
 
           <PlayerMana currentMana={opponent.mana} maxMana={MAX_MANA} typePlayer={"opponent"} />

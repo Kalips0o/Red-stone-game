@@ -1,7 +1,7 @@
 import { useNotificationStore } from '@/store/notiffication/notification.store'
 import cn from 'clsx'
 import { motion, AnimatePresence } from 'framer-motion'
-
+import './Notification.scss'
 export function Notification() {
 	const { message, type } = useNotificationStore()
 
@@ -9,7 +9,7 @@ export function Notification() {
 		<AnimatePresence>
 			{!!message && (
 				<motion.div
-					className='fixed w-full h-full left-0 top-0 z-50 flex items-center justify-center bg-[#102a27]/90'
+					className='fixed w-full h-full left-0 top-0 z-50 flex items-center justify-center bg-[#071110]/90'
 					initial={{ opacity: 1 }}
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
@@ -17,11 +17,10 @@ export function Notification() {
 				>
 					<motion.div
 						className={cn(
-							'rounded-lg py-2 px-4 w-max font-semibold text-xl shadow-2xl',
+							'rounded-lg py-2 px-4 w-max font-semibold text-[2rem] shadow-2xl  text-gray-800 turn',
 							{
-								'bg-gradient-to-t from-green-700 to-green-500': type === 'win',
-								'bg-gradient-to-t from-red-700 to-red-500': type === 'lose',
-								'secondary-gradient text-white': type === 'info',
+								' win ' : type === 'win',
+								' lose ': type === 'lose',
 							}
 						)}
 						initial={{ opacity: 1, scale: 1 }}

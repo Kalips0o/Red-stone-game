@@ -18,8 +18,7 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 		opponent.health -= attacker.attack;
 		attacker.isCanAttack = false;
 
-		// Логирование атаки в консоль
-		console.log(`${isAttackerPlayer ? 'Player' : 'Opponent'} attacked and dealt ${attacker.attack} damage!`);
+		console.log(`${isAttackerPlayer ? 'Player' : 'Opponent'} attacked hero and dealt ${attacker.attack} damage!`);
 
 		useDamageStore
 			.getState()
@@ -29,7 +28,6 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 			state.isGameOver = true;
 			state.isGameStarted = false;
 
-			// Логирование завершения игры в консоль
 			console.log(`${isAttackerPlayer ? 'Player' : 'Opponent'} wins the game!`);
 
 			useNotificationStore

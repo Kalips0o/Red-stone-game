@@ -1,0 +1,32 @@
+.turn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-size: cover;
+	background: url('/src/assets/turn.png') center;
+	width: 400px;
+	height: 400px;
+}
+
+.win {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-size: cover;
+	background: url('/src/assets/win.png') center;
+	width: 500px;
+	height: 500px;
+    color: green;
+}
+
+.lose {
+	display: flex;
+    color: red;
+	justify-content: center;
+	align-items: center;
+	background-size: cover;
+	background: url('/src/assets/win.png') center;
+	width: 500px;
+	height: 500px;
+}
+

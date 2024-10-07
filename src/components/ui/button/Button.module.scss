@@ -1,6 +1,5 @@
 .button {
   @apply py-3 px-5 rounded-lg primary-gradient text-[#D06E14] font-bold text-xl transition-all duration-300 ease-in-out cursor-pointer;
-  box-shadow: -1px 3px 0 #b23909;
 
   &:hover,
   &.active {
@@ -25,6 +24,56 @@
 
     &:hover {
       box-shadow: 0 2.5px 0 #434343;
+    }
+  }
+
+  &.start {
+    height: 90px;
+    width: 90px;
+    border-radius: 50% 0% 50% 50%;
+    transform: rotate(-47deg);
+    display: flex;              
+    justify-content: center;    
+    align-items: center;         
+    position: relative;          
+    color: #cdcbc8;
+    background: radial-gradient(circle, rgba(61, 56, 163, 0.308) 0%, rgba(81, 81, 228, 0.21) 44%, rgba(10, 10, 56, 0.644) 83%);
+    
+    
+    &::after {
+      content: '';               
+      position: absolute;       
+      top: 0;                  
+      left: 0;                 
+      right: 0;                
+      bottom: 0;               
+      border-radius: inherit;   
+      opacity: 0;              
+      transition: opacity 0.3s; 
+      z-index: -1;              
+    }
+
+  
+    span {
+      transform: rotate(47deg); 
+    }
+
+    animation: glowing 2.5s infinite alternate;
+
+    @keyframes glowing {
+      0% {
+        box-shadow: 0 0 40px rgb(155, 255, 255);
+      }
+      50% {
+        box-shadow: 0 0 50px rgba(248, 6, 6, 0.685);
+      }
+      100% {
+        box-shadow: 0 0 40px rgb(155, 255, 255);
+      }
+    }
+
+    &:hover {
+      background: radial-gradient(circle, rgba(61, 56, 163, 0.534) 0%, rgba(81, 81, 228, 0.619) 44%, rgba(10, 10, 56, 0.712) 83%);
     }
   }
 
