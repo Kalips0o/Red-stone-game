@@ -1,20 +1,15 @@
 import { create } from "zustand"
 
-type TypeNotification = 'win' | 'lose' | 'info' | 'turn'
-
 interface INotificationStore {
   message: string
-  type: TypeNotification
-  show: (message: string, type?:TypeNotification) => void;
+  type: 'win' | 'lose' | 'info'
+  show: (message: string, type?: 'win' | 'lose' | 'info') => void
+  hide: () => void
 }
 
-export const useNotificationStore = create<INotificationStore>((set) => ({
+export const useNotificationStore = create<INotificationStore>(set => ({
   message: '',
   type: 'info',
-  show: (message, type, duration = 2000) => {
-    set({ message, type });
-    setTimeout(() => {
-      set({ message: '' });
-    }, duration);
-  },
+  show: (message, type = 'info') => set({ message, type }),
+  hide: () => set({ message: '', type: 'info' })
 }))

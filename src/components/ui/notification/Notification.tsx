@@ -2,15 +2,30 @@ import { useNotificationStore } from '@/store/notiffication/notification.store'
 import cn from 'clsx'
 import { motion, AnimatePresence } from 'framer-motion'
 import './Notification.scss'
+import { useEffect, useState } from 'react'
+
 export function Notification() {
-	const { message, type } = useNotificationStore()
+	const { message, type, hide } = useNotificationStore()
+	const [isVisible, setIsVisible] = useState(false)
+
+	useEffect(() => {
+		if (message) {
+			setIsVisible(true)
+			const timer = setTimeout(() => {
+				setIsVisible(false)
+				setTimeout(hide, 500) 
+			}, type === 'win' || type === 'lose' ? 5000 : 2000) 
+
+			return () => clearTimeout(timer)
+		}
+	}, [message, type, hide])
 
 	return (
 		<AnimatePresence>
-			{!!message && (
+			{isVisible && (
 				<motion.div
 					className='fixed w-full h-full left-0 top-0 z-50 flex items-center justify-center bg-[#071110]/90'
-					initial={{ opacity: 1 }}
+					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					transition={{ duration: 0.5 }}
@@ -23,7 +38,7 @@ export function Notification() {
 								' lose ': type === 'lose',
 							}
 						)}
-						initial={{ opacity: 1, scale: 1 }}
+						initial={{ opacity: 0, scale: 0.8 }}
 						animate={{ opacity: 1, scale: 1 }}
 						exit={{ opacity: 0, scale: 1.2 }}
 						transition={{ duration: 0.6 }}

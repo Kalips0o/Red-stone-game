@@ -24,23 +24,33 @@ const useGameStore = create<IGameStore>(set => ({
 
     // Экшен для завершения хода
     endTurn: () => {
-        // Устанавливаем состояние игры как завершенный ход
-        set(endTurnAction);
-        
-        // Через 3 секунды запускаем ход оппонента
-        setTimeout(() => {
-            set(state => {
-                // Выполняем случайный ход оппонента, обновляем состояние игры
-                const updatedState = randomOpponentPlay(state);
-
-                // Через 2.5 секунды завершаем ход оппонента, применяя его действия
+        set(state => {
+            // Если игра завершена, не выполняем никаких действий
+            if (state.isGameOver) {
+                return state;
+            }
+            
+            const updatedState = endTurnAction(state);
+            
+            // Запускаем ход оппонента только если игра не завершена
+            if (!updatedState.isGameOver) {
                 setTimeout(() => {
-                    set(() => endTurnAction(updatedState));
-                }, 2500);
-
-                return updatedState;
-            });
-        }, 3000);
+                    set(state => {
+                        const updatedState = randomOpponentPlay(state);
+                        
+                        if (!updatedState.isGameOver) {
+                            setTimeout(() => {
+                                set(() => endTurnAction(updatedState));
+                            }, 2500);
+                        }
+                        
+                        return updatedState;
+                    });
+                }, 3000);
+            }
+            
+            return updatedState;
+        });
     },
 
     // Экшен для разыгрывания карты, идентифицируем карту по её id

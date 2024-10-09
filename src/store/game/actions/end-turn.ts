@@ -20,6 +20,11 @@ const updateCardOnTheEndTurn = (deck: IGameCard[]) =>
 // Экшен для завершения хода
 export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
 
+  // Если игра уже завершена, не выполняем никаких действий
+  if (state.isGameOver) {
+    return state;
+  }
+
   // Определяем новый ход (если сейчас ход игрока, следующий будет оппонента и наоборот)
   const newTurn: TPlayer = state.currentTurn === "player" ? "opponent" : "player";
 
@@ -34,7 +39,7 @@ export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
   let newOpponentMana = state.opponent.mana;
 
   // Если следующий ход игрока, обновляем ману игрока и выводим уведомление
-  if (isNewTurnPlayer) {
+  if (isNewTurnPlayer && !state.isGameOver) {
     newPlayerMana = getNewMana(newTurnNumber);
     useNotificationStore.getState().show('Your turn');  // Уведомление о начале хода игрока
   } else {

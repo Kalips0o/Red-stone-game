@@ -13,7 +13,7 @@ export function GameBoard() {
 
   return (
     <div
-      className="relative h-screen w-full bg-image"
+      className="relative h-screen w-full "
      
     >
       <SectionSide isPlayer={false}>
@@ -41,7 +41,7 @@ export function GameBoard() {
         </div>
 
          <GridBoardCards deck={opponent.deck} isPlayerSide={false} />
-      </SectionSide>
+          </SectionSide>
 
 
 <div className='absolute  left-0  w-full'
