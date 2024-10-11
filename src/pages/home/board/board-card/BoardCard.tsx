@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { IGameCard } from "@/store/game/game.types";
 import { motion } from "framer-motion";
 import cn from 'clsx';
@@ -17,7 +18,7 @@ export function BoardCard({ card, isPlayerSide }: Props) {
   const { handleSelectTarget } = useEnemyTarget();
   const { returnCard, currentTurn } = useGameStore();
   const { setCardAttackerId, cardAttackerId } = useSelectAttacker();
-
+  const [isHovered, setIsHovered] = useState(false);
 
   // Обработчик клика на карте
   const handleClick = (cardId: string) => {
@@ -49,13 +50,16 @@ export function BoardCard({ card, isPlayerSide }: Props) {
       )}
       initial={{ scale: 0.5, rotate: -15, y: -200, opacity: 0 }} // Начальные параметры анимации
       animate={{
-        scale: 1,
+        scale: isHovered ? 1.5 : 1,
         rotate: 0,
         y: 0,
         opacity: 1,
+        zIndex: isHovered ? 10 : 'auto',
       }}
       transition={{ type: 'spring', stiffness: 150, damping: 20, mass: 1 }} // Параметры перехода
       onClick={() => (currentTurn !== 'player' ? null : handleClick(card.id))} // Обработчик клика с проверкой текущего хода
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <img alt={card.name} src={card.imageUrl} draggable="false" /> 
       <DamageList id={card.id} isRight /> 
