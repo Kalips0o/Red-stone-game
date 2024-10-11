@@ -3,15 +3,23 @@
     background-size: cover;
     background-position: center;
     position: relative;
-    
+    overflow: hidden;
+}
+
+.game-title {
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
 }
 
 .button-container {
-    position: relative;
+    position: absolute;
+    bottom: 19.4%;
+    left: 50.3%;
+    transform: translateX(-50%);
     z-index: 10;
-    margin-left: 0.5rem;
-    padding: 1rem;
-   
 }
 
 .squares {

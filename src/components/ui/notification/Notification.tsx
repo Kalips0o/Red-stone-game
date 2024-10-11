@@ -24,7 +24,7 @@ export function Notification() {
 		<AnimatePresence>
 			{isVisible && (
 				<motion.div
-					className='fixed w-full h-full left-0 top-0 z-50 flex items-center justify-center bg-[#071110]/90'
+					className='fixed w-full h-full left-0 top-0 z-50 flex items-center justify-center bg-[#071110]/90  '
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
@@ -32,10 +32,10 @@ export function Notification() {
 				>
 					<motion.div
 						className={cn(
-							'rounded-lg py-2 px-4 w-max font-semibold text-[2rem] shadow-2xl  text-gray-800 turn',
+							'rounded-lg py-2 px-4 w-max font-semibold text-[2rem] shadow-2xl  text-gray-800 turn block',
 							{
-								' win ' : type === 'win',
-								' lose ': type === 'lose',
+								' result text-green-500' : type === 'win',
+								' result text-red-500 ': type === 'lose',
 							}
 						)}
 						initial={{ opacity: 0, scale: 0.8 }}

@@ -1,32 +1,18 @@
-.turn {
+.block {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background-size: cover;
-	background-image: url('/src/assets/turn.png');
+}
+
+.turn {
+background-image: url('/src/assets/turn.png') ;
 	width: 400px;
 	height: 400px;
-	z-index: 50;
 }
 
-.win {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-size: cover;
-	background-image: url('/src/assets/win.png');
-	width: 500px;
-	height: 500px;
-    color: green;
-}
-
-.lose {
-	display: flex;
-    color: red;
-	justify-content: center;
-	align-items: center;
-	background-size: cover;
-	background-image: url('/src/assets/win.png');
+.result  {
+	background-image: url('/src/assets/result.png') ;
 	width: 500px;
 	height: 500px;
 }

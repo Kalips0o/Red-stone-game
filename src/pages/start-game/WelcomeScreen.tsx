@@ -17,13 +17,14 @@ export const WelcomeScreen = () => {
     };
 
     return (
-        <div className="start-img flex flex-col gap-20 items-center h-screen relative">
-            <Heading>RED STONE</Heading>
+        <div className="start-img flex flex-col items-center h-screen relative">
+            <div className="game-title">
+                <Heading>RED STONE</Heading>
+            </div>
     
             <div className="button-container">
-                <Button variant="start"  onClick={onClick} className="mt-[15rem]">
-                    {isPending ? <Loader /> : <span> Start</span>}
-                
+                <Button variant="start" onClick={onClick}>
+                    {isPending ? <Loader /> : <span>Start</span>}
                 </Button>
             </div>
 
