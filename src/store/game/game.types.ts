@@ -37,3 +37,8 @@ export interface IGameStore extends IGameFnStore {
 	turn: number
 }
 
+export interface CardStatsProps {
+	mana: number;
+	attack: number;
+	health: number;
+  }

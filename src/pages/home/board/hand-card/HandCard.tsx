@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { getStyleRotation } from '@/pages/home/board/hand-card/get-style-rotation.ts';
 import type { ICard } from '@/card.types';
 import { useGameStore } from '@/store/game/game.store';
+import { Card } from '@/components/cards/Card';
 
 
 interface Props {
@@ -44,41 +45,46 @@ export function HandCard({
 
   return (
     <motion.button
-      className={cn(
-        'h-[8.5rem] w-24 inline-block -ml-6  rounded-lg  will-change-transform relative ',
-        {
-         ' shadow -ml-7' : !isHided,
-         '-ml-[2.15rem]' : isHided,
-         'cursor-pointer' : !isHided && !isDisabledButton,
-         'border-green-400' :
-          !isHided && currentTurn === 'player' && player.mana >= card.mana
-          }
-      )}
-      style={style}
-      disabled={isDisabledButton}
-      onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      initial={{ scale: 1, zIndex: 0, y: 0 }}
-      animate={
-        isHovered && !isHided
-          ? {
-              scale: 1.3,
-              zIndex: 10,
-              y: -95
-            }
-          : initialAnimation
+    className={cn(
+      'h-[8.5rem] w-24 inline-block -ml-6 rounded-lg will-change-transform relative',
+      {
+        'shadow -ml-7': !isHided,
+        '-ml-[2.15rem]': isHided,
+        'cursor-pointer': !isHided && !isDisabledButton,
+        'border-green-400':
+          !isHided && currentTurn === 'player' && player.mana >= card.mana,
       }
-      transition={{ type:'just', stiffness: 230, damping: 32 }}
-    >
-      {isDisabledButton && (
-        <div className='absolute top-0 left-0 w-full h-full bg-black/60 z-[1] rounded-lg' />) }
-      <img
-        src={isHided ? '/src/assets/cards/cover.png' : card.imageUrl}
-        alt={card.name}
-        draggable="false"
-        className="will-change-transform"
-      />
-    </motion.button>
+    )}
+    style={style}
+    disabled={isDisabledButton}
+    onClick={onClick}
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
+    initial={{ scale: 1, zIndex: 0, y: 0 }}
+    animate={
+      isHovered && !isHided
+        ? {
+            scale: 1.3,
+            zIndex: 10,
+            y: -95,
+          }
+        : initialAnimation
+    }
+    transition={{ type: 'just', stiffness: 230, damping: 32 }}
+  >
+    {isDisabledButton && (
+      <div className='absolute top-0 left-0 w-full h-full bg-black/60 z-[1] rounded-lg' />
+    )}
+  
+
+  <Card
+  mana={card.mana}
+  attack={card.attack}
+  health={card.health}
+  imageUrl={isHided ? '/src/assets/cards/cover.png' : card.imageUrl}
+  isInHand={true}
+/>
+  </motion.button>
+  
   );
 }

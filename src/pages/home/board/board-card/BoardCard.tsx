@@ -6,6 +6,9 @@ import { useGameStore } from "@/store/game/game.store";
 import { useEnemyTarget } from "./useEnemyTarget";
 import { useSelectAttacker } from "@/store/game/actions/select-attacker";
 import { DamageList } from "../DamageList";
+import { Card } from "@/components/cards/Card";
+import './BoardCard.scss';
+
 
 interface Props {
   card: IGameCard; 
@@ -14,7 +17,6 @@ interface Props {
 
 // Основной компонент
 export function BoardCard({ card, isPlayerSide }: Props) {
-  // Использование хуков для доступа к состоянию игры и выбора атакующего
   const { handleSelectTarget } = useEnemyTarget();
   const { returnCard, currentTurn } = useGameStore();
   const { setCardAttackerId, cardAttackerId } = useSelectAttacker();
@@ -61,7 +63,7 @@ export function BoardCard({ card, isPlayerSide }: Props) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <img alt={card.name} src={card.imageUrl} draggable="false" /> 
+        <Card mana={card.mana} attack={card.attack} health={card.health} imageUrl={card.imageUrl} />
       <DamageList id={card.id} isRight /> 
     </motion.button>
   );
