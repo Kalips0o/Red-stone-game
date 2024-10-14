@@ -64,6 +64,22 @@ export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
     turn: newTurnNumber  // Обновление номера хода
   };
 
+  // Проверяем, остались ли карты у игроков (на поле, в руке или в колоде)
+  const playerHasCards = updatedState.player.deck.length > 0;
+  const opponentHasCards = updatedState.opponent.deck.length > 0;
+
+  if (!playerHasCards || !opponentHasCards) {
+    updatedState.isGameOver = true;
+    updatedState.isGameStarted = false;
+
+    const winner = playerHasCards ? 'player' : 'opponent';
+    const message = winner === 'player' ? 'You win!' : 'You lose!';
+    
+    useNotificationStore.getState().show(message, winner === 'player' ? 'win' : 'lose');
+
+    return updatedState;
+  }
+
   // Если ход оппонента, тянем карты для него
   if (!isNewTurnPlayer) {
     updatedState.opponent = {

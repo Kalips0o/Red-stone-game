@@ -1,5 +1,19 @@
 import type { IGameCard, IGameStore } from "../game.types";
 import { useDamageStore } from "./damage.store";
+import { create } from 'zustand';
+
+// Создаем новый стор для управления анимацией удаления карт
+interface IRemoveCardStore {
+  cardsToRemove: string[];
+  addCardToRemove: (cardId: string) => void;
+  clearCardsToRemove: () => void;
+}
+
+export const useRemoveCardStore = create<IRemoveCardStore>((set) => ({
+  cardsToRemove: [],
+  addCardToRemove: (cardId) => set((state) => ({ cardsToRemove: [...state.cardsToRemove, cardId] })),
+  clearCardsToRemove: () => set({ cardsToRemove: [] }),
+}));
 
 export const getCardById = (cardId: string, deck: IGameCard[]) =>
   deck.find(card => card.id === cardId);
@@ -8,50 +22,68 @@ export const attackCardAction = (
   state: IGameStore,
   attackerId: string,
   targetId: string
-) => {
+): IGameStore => {
   const isAttackerPlayer = state.currentTurn === 'player';
-  const attacker = getCardById(
-    attackerId,
-    isAttackerPlayer ? state.player.deck : state.opponent.deck
-  );
-  const target = getCardById(
-    targetId,
-    isAttackerPlayer ? state.opponent.deck : state.player.deck
-  );
+  const attackerDeck = isAttackerPlayer ? state.player.deck : state.opponent.deck;
+  const targetDeck = isAttackerPlayer ? state.opponent.deck : state.player.deck;
+
+  const attackerIndex = attackerDeck.findIndex(card => card.id === attackerId);
+  const targetIndex = targetDeck.findIndex(card => card.id === targetId);
+
+  if (attackerIndex === -1 || targetIndex === -1) {
+    console.error("Attacker or target card not found");
+    return state;
+  }
+
+  const attacker = { ...attackerDeck[attackerIndex] };
+  const target = { ...targetDeck[targetIndex] };
 
   if (attacker && target && attacker.isCanAttack) {
+    // Рассчитываем урон
+    const damageToTarget = attacker.attack;
+    const damageToAttacker = target.attack;
+
     // Наносим урон
-    target.health -= attacker.attack;
-    attacker.health -= target.attack;
+    target.health -= damageToTarget;
+    attacker.health -= damageToAttacker;
 
     // Отмечаем, что атакующая карта больше не может атаковать в этом ходу
     attacker.isCanAttack = false;
 
     // Добавляем урон для отображения на экране
-    useDamageStore.getState().addDamage(targetId, attacker.attack);
-    useDamageStore.getState().addDamage(attackerId, target.attack);
+    useDamageStore.getState().addDamage(targetId, damageToTarget);
+    useDamageStore.getState().addDamage(attackerId, damageToAttacker);
 
-    // Функция для удаления карты из колоды
-    const removeCardFromDeck = (deck: IGameCard[], cardId: string) => 
-      deck.filter(card => card.id !== cardId);
+    // Обновляем колоды
+    const newAttackerDeck = [...attackerDeck];
+    const newTargetDeck = [...targetDeck];
 
-    // Проверяем и удаляем карты с нулевым или отрицательным здоровьем
     if (target.health <= 0) {
-      if (isAttackerPlayer) {
-        state.opponent.deck = removeCardFromDeck(state.opponent.deck, targetId);
-      } else {
-        state.player.deck = removeCardFromDeck(state.player.deck, targetId);
-      }
+      useRemoveCardStore.getState().addCardToRemove(targetId);
+      newTargetDeck.splice(targetIndex, 1);
+    } else {
+      newTargetDeck[targetIndex] = target;
     }
 
     if (attacker.health <= 0) {
-      if (isAttackerPlayer) {
-        state.player.deck = removeCardFromDeck(state.player.deck, attackerId);
-      } else {
-        state.opponent.deck = removeCardFromDeck(state.opponent.deck, attackerId);
-      }
+      useRemoveCardStore.getState().addCardToRemove(attackerId);
+      newAttackerDeck.splice(attackerIndex, 1);
+    } else {
+      newAttackerDeck[attackerIndex] = attacker;
     }
 
+    // Создаем новое состояние
+    const newState = { ...state };
+    if (isAttackerPlayer) {
+      newState.player = { ...newState.player, deck: newAttackerDeck };
+      newState.opponent = { ...newState.opponent, deck: newTargetDeck };
+    } else {
+      newState.opponent = { ...newState.opponent, deck: newAttackerDeck };
+      newState.player = { ...newState.player, deck: newTargetDeck };
+    }
+
+    return newState;
   }
 
-  return { player: state.player, opponent: state.opponent };}
+  return state;
+}
