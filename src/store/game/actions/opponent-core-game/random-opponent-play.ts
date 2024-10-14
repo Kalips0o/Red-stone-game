@@ -1,7 +1,7 @@
 import { EnumTypeCard } from "@/card.types";
 import type { IGameStore } from "../../game.types";
-import { attackCardAction } from "../atack-card";
-import { attackHeroAction } from "../hero-atack";
+import { attackCardAction } from "../attack-card";
+import { attackHeroAction } from "../hero-attack";
 import random from "lodash/random";
 import { MAX_MANA } from "@/constants/game/core.constants";
 import { playRandomCard } from "./play-random-card";

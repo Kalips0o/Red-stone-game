@@ -1,5 +1,5 @@
 import type { IGameStore } from '../game.types'
-import { getCardById } from './atack-card'
+import { getCardById } from './attack-card'
 import { useNotificationStore } from '@/store/notiffication/notification.store'
 import { useDamageStore } from './damage.store'
 import { EnumTypeCard } from '@/card.types'

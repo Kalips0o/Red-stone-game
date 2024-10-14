@@ -7,7 +7,7 @@ import { useEnemyTarget } from "./useEnemyTarget";
 import { useSelectAttacker } from "@/store/game/actions/select-attacker";
 import { DamageList } from "../DamageList";
 import { Card } from "@/components/cards/Card";
-import { useRemoveCardStore } from "@/store/game/actions/atack-card";
+import { useRemoveCardStore } from "@/store/game/actions/attack-card";
 
 interface Props {
   card: IGameCard; 
@@ -43,8 +43,6 @@ export function BoardCard({ card, isPlayerSide }: Props) {
   }, [cardsToRemove, card.id]);
 
   const handleClick = (cardId: string) => {
-    
-
     if (isPlayerSide) {
       if (card.isCanAttack) {
         setCardAttackerId(cardId);
@@ -61,6 +59,33 @@ export function BoardCard({ card, isPlayerSide }: Props) {
 
   const isSelectPlayerAttacker = isPlayerSide && cardAttackerId === card.id;
 
+  const cardVariants = {
+    initial: { 
+      scale: 0.5, 
+      rotate: isPlayerSide ? 15 : -15, 
+      y: isPlayerSide ? 200 : -200, 
+      opacity: 0 
+    },
+    animate: {
+      scale: 1,
+      rotate: 0,
+      y: 0,
+      opacity: 1,
+      transition: { 
+        type: 'spring', 
+        stiffness: 150, 
+        damping: 20, 
+        mass: 1,
+        duration: 0.5
+      }
+    },
+    hover: {
+      scale: 1.5,
+      zIndex: 50,
+      transition: { duration: 0.2 }
+    }
+  };
+
   return (
     <AnimatePresence>
       {!isDestroying && (
@@ -73,20 +98,16 @@ export function BoardCard({ card, isPlayerSide }: Props) {
               'cursor-not-allowed': currentTurn !== 'player'
             }
           )}
-          initial={{ scale: 0.5, rotate: -15, y: -200, opacity: 0 }}
-          animate={{
-            scale: isHovered ? 1.5 : 1,
-            rotate: 0,
-            y: 0,
-            opacity: 1,
-            zIndex: isHovered ? 10 : 'auto',
-          }}
-          transition={{ type: 'spring', stiffness: 150, damping: 20, mass: 1 }}
+          variants={cardVariants}
+          initial="initial"
+          animate="animate"
+          whileHover="hover"
           onClick={() => (currentTurn !== 'player' ? null : handleClick(card.id))}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          style={{ zIndex: isHovered ? 50 : 'auto' }}
         >
-          <Card mana={card.mana} attack={card.attack} health={card.health} imageUrl={card.imageUrl} />
+          <Card mana={card.mana} attack={card.attack} health={card.health} imageUrl={card.imageUrl} isHovered={isHovered} />
           <DamageList id={card.id} isRight /> 
         </motion.div>
       )}
