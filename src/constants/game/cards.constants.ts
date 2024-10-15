@@ -1,6 +1,5 @@
 import {EnumTypeCard, type ICard} from "../../card.types";
 
-
 export const CARDS: ICard[] = [
 	{
 		name: 'HTML',
@@ -47,7 +46,7 @@ export const CARDS: ICard[] = [
 	{
 		name: 'Webstorm',
 		mana: 2,
-		attack: 2,
+		attack: 3,
 		health: 3,
 		imageUrl: '/src/assets/cards/webstorm.png',
 	},
@@ -158,7 +157,6 @@ export const CARDS: ICard[] = [
 		mana: 6,
 		attack: 5,
 		health: 7,
-		type: EnumTypeCard.taunt,
 		imageUrl: '/src/assets/cards/bootstrap.png',
 	},
 	{
@@ -172,9 +170,116 @@ export const CARDS: ICard[] = [
 	{
 		name: 'Gulp',
 		mana: 5,
+		attack: 6,
+		health: 3,
+		imageUrl: '/src/assets/cards/gulp.png',
+	},
+	{
+		name: 'Backbone.js',
+		mana: 6,
+		attack: 6,
+		health: 6,
+		type: EnumTypeCard.taunt,
+		imageUrl: '/src/assets/cards/backbone.png',
+	},
+	{
+		name: 'Foundation',
+		mana: 5,
+		attack: 3,
+		health: 7,
+		type: EnumTypeCard.taunt,
+		imageUrl: '/src/assets/cards/foundation.png',
+	},
+	{
+		name: 'Ember.js',
+		mana: 5,
+		attack: 5,
+		health: 10,
+		type: EnumTypeCard.taunt,
+		imageUrl: '/src/assets/cards/ember.png',
+	},
+	{
+		name: 'Alpine.js',
+		mana: 3,
+		attack: 6,
+		health: 4,
+		imageUrl: '/src/assets/cards/alpine.png',
+	},
+	{
+		name: 'D3.js',
+		mana: 3,
+		attack: 7,
+		health: 8,
+		imageUrl: '/src/assets/cards/d3.png',
+	},
+	{
+		name: 'Preact',
+		mana: 2,
+		attack: 5,
+		health: 1,
+		imageUrl: '/src/assets/cards/preact.png',
+	},
+	{
+		name: 'Electron',
+		mana: 2,
+		attack: 4,
+		health: 2,
+		imageUrl: '/src/assets/cards/electron.png',
+	},
+	{
+		name: 'Lit',
+		mana: 2,
+		attack: 3,
+		health: 4,
+		imageUrl: '/src/assets/cards/lit.png',
+	},
+	{
+		name: 'Vite',
+		mana: 2,
 		attack: 4,
 		health: 3,
-		type: EnumTypeCard.taunt,
-		imageUrl: '/src/assets/cards/gulp.png',
+		imageUrl: '/src/assets/cards/vite.png',
+	},
+	{
+		name: 'Stencil',
+		mana: 2,
+		attack: 3,
+		health: 5,
+		imageUrl: '/src/assets/cards/stencil.png',
+	},
+	{
+		name: 'Storybook',
+		mana: 2,
+		attack: 5,
+		health: 2,
+		imageUrl: '/src/assets/cards/storybook.png',
+	},
+	{
+		name: 'Grunt',
+		mana: 2,
+		attack: 1,
+		health: 6,
+		imageUrl: '/src/assets/cards/grunt.png',
+	},
+	{
+		name: 'Handlebars',
+		mana: 2,
+		attack: 6,
+		health: 1,
+		imageUrl: '/src/assets/cards/handlebars.png',
+	},
+	{
+		name: 'Firebase',
+		mana: 2,
+		attack: 2,
+		health: 5,
+		imageUrl: '/src/assets/cards/firebase.png',
+	},
+	{
+		name: 'GraphQL',
+		mana: 2,
+		attack: 5,
+		health: 3,
+		imageUrl: '/src/assets/cards/graphQL.png',
 	},
 ]
