@@ -8,6 +8,7 @@ import { useSelectAttacker } from "@/store/game/actions/select-attacker";
 import { DamageList } from "../DamageList";
 import { Card } from "@/components/cards/Card";
 import { useRemoveCardStore } from "@/store/game/actions/attack-card";
+import { useNotificationStore } from "@/store/notiffication/notification.store";
 
 interface Props {
   card: IGameCard; 
@@ -30,11 +31,12 @@ const destroyAnimation = {
 
 export function BoardCard({ card, isPlayerSide }: Props) {
   const { handleSelectTarget } = useEnemyTarget();
-  const { returnCard, currentTurn, attackCard } = useGameStore();
+  const { returnCard, currentTurn, isPlayerTurnNotified, attackCard } = useGameStore();
   const { setCardAttackerId, cardAttackerId } = useSelectAttacker();
   const [isHovered, setIsHovered] = useState(false);
   const [isDestroying, setIsDestroying] = useState(false);
   const cardsToRemove = useRemoveCardStore((state) => state.cardsToRemove);
+  const { message } = useNotificationStore();
 
   useEffect(() => {
     if (cardsToRemove.includes(card.id)) {
@@ -86,6 +88,8 @@ export function BoardCard({ card, isPlayerSide }: Props) {
     }
   };
 
+  const canEnlarge = currentTurn === "player" && isPlayerTurnNotified && !message;
+
   return (
     <AnimatePresence>
       {!isDestroying && (
@@ -101,13 +105,13 @@ export function BoardCard({ card, isPlayerSide }: Props) {
           variants={cardVariants}
           initial="initial"
           animate="animate"
-          whileHover="hover"
+          whileHover={canEnlarge ? "hover" : "animate"}
           onClick={() => (currentTurn !== 'player' ? null : handleClick(card.id))}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          style={{ zIndex: isHovered ? 50 : 'auto' }}
+          style={{ zIndex: isHovered && canEnlarge ? 10 : 'auto' }}
         >
-          <Card mana={card.mana} attack={card.attack} health={card.health} imageUrl={card.imageUrl} isHovered={isHovered} />
+          <Card mana={card.mana} attack={card.attack} health={card.health} imageUrl={card.imageUrl} isHovered={isHovered && canEnlarge} />
           <DamageList id={card.id} isRight /> 
         </motion.div>
       )}

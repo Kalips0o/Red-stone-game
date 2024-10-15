@@ -35,6 +35,7 @@ export interface IGameStore extends IGameFnStore {
 	isGameOver: boolean
 	currentTurn: TPlayer
 	turn: number
+	isPlayerTurnNotified: boolean;
 }
 
 export interface CardStatsProps {

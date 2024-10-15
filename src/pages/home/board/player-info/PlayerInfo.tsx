@@ -39,9 +39,11 @@ export function PlayerInfo({ player, typePlayer }: Props) {
       onClick={()=>isPlayer ? null : handleSelectTarget(typePlayer, true)}
     >
       <img 
-      width={200}
-      src={isPlayer ? '/src/assets/heroes/player.png' : '/src/assets/heroes/opponent.png'}
-       alt="avatar" draggable={false}/>
+        width={isPlayer ? 240 : 210}
+        src={isPlayer ? '/src/assets/heroes/player.png' : '/src/assets/heroes/opponent.png'}
+        alt="avatar" 
+        draggable={false}
+      />
     
     <div className={cn('absolute  w-full flex justify-center items-center', 
  isPlayer ? 'bottom-2.5' : '-bottom-1'
