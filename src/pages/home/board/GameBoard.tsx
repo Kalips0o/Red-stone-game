@@ -48,7 +48,6 @@ export function GameBoard() {
 style={{
  top: 'calc(50vh - 1px)'
 }}>
-  <hr  className="border-yellow-500 opacity-20 w-11/12"/>
   <EndTurnButton/>
 </div>
 

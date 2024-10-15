@@ -27,7 +27,7 @@ export const useDamageStore = create<IDamageStore>((set) => ({
       },
     }));
 
-    // Через 2 секунды удаляем добавленный урон из состояния
+    // Увеличиваем время до удаления урона с 4 секунд до 6 секунд
     setTimeout(() => {
       set((state) => ({
         damages: {
@@ -35,6 +35,6 @@ export const useDamageStore = create<IDamageStore>((set) => ({
           [cardId]: state.damages[cardId].filter((d) => d.id !== damageId), // Удаляем урон с соответствующим id после истечения времени
         },
       }));
-    }, 2000); // Урон отображается 2 секунды, после чего удаляется
+    }, 5000); 
   },
 }));

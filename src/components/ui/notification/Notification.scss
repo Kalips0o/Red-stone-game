@@ -11,9 +11,15 @@ background-image: url('/src/assets/turn.png') ;
 	height: 400px;
 }
 
-.result  {
-	background-image: url('/src/assets/result.png') ;
+.lose  {
+	background-image: url('/src/assets/lose.png') ;
 	width: 500px;
 	height: 500px;
 }
 
+
+.win  {
+	background-image: url('/src/assets/win.png') ;
+	width: 500px;
+	height: 500px;
+}

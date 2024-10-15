@@ -11,6 +11,8 @@ interface ISoundStore {
   playCardDeal: () => void;
   playCardOnTable: () => void;
   playCardAttack: () => void;
+  playWin: () => void;
+  playLose: () => void;
 }
 
 export const useSoundStore = create<ISoundStore>(() => ({
@@ -19,6 +21,8 @@ export const useSoundStore = create<ISoundStore>(() => ({
   playCardDeal: () => {},
   playCardOnTable: () => {},
   playCardAttack: () => {},
+  playWin: () => {},
+  playLose: () => {},
 }));
 
 export const attackHeroAction = (state: IGameStore, attackerId: string

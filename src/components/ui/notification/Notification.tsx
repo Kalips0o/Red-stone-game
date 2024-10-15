@@ -30,8 +30,9 @@ export function Notification() {
 						className={cn(
 							'rounded-lg py-2 px-4 w-max font-semibold text-[2rem] shadow-2xl text-gray-800 turn block',
 							{
-								'result text-green-500': type === 'win',
-								'result text-red-500': type === 'lose',
+								'win': type === 'win',
+								'lose': type === 'lose',
+								'turn': type === 'info'
 							}
 						)}
 						initial={{ opacity: 0, scale: 0.8 }}
@@ -39,7 +40,7 @@ export function Notification() {
 						exit={{ opacity: 0, scale: 1.2 }}
 						transition={{ duration: 0.6 }}
 					>
-						{message}
+						{type === 'info' && message}
 					</motion.div>
 				</motion.div>
 			)}
