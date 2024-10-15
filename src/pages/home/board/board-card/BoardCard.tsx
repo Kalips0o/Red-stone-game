@@ -9,6 +9,7 @@ import { DamageList } from "../DamageList";
 import { Card } from "@/components/cards/Card";
 import { useRemoveCardStore } from "@/store/game/actions/attack-card";
 import { useNotificationStore } from "@/store/notiffication/notification.store";
+import { useSoundStore } from "@/store/game/actions/hero-attack";
 
 interface Props {
   card: IGameCard; 
@@ -37,6 +38,7 @@ export function BoardCard({ card, isPlayerSide }: Props) {
   const [isDestroying, setIsDestroying] = useState(false);
   const cardsToRemove = useRemoveCardStore((state) => state.cardsToRemove);
   const { message } = useNotificationStore();
+  const { playCardAttack } = useSoundStore();
 
   useEffect(() => {
     if (cardsToRemove.includes(card.id)) {
@@ -53,6 +55,7 @@ export function BoardCard({ card, isPlayerSide }: Props) {
       }
     } else if (cardAttackerId) {
       attackCard(cardAttackerId, cardId);
+      playCardAttack();
       setCardAttackerId(null);
     } else {
       handleSelectTarget(cardId, true);

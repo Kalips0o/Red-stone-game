@@ -3,6 +3,23 @@ import { getCardById } from './attack-card'
 import { useNotificationStore } from '@/store/notiffication/notification.store'
 import { useDamageStore } from './damage.store'
 import { EnumTypeCard } from '@/card.types'
+import create from 'zustand'
+
+interface ISoundStore {
+  playPlayerScream: () => void;
+  playOpponentScream: () => void;
+  playCardDeal: () => void;
+  playCardOnTable: () => void;
+  playCardAttack: () => void;
+}
+
+export const useSoundStore = create<ISoundStore>(() => ({
+  playPlayerScream: () => {},
+  playOpponentScream: () => {},
+  playCardDeal: () => {},
+  playCardOnTable: () => {},
+  playCardAttack: () => {},
+}));
 
 export const attackHeroAction = (state: IGameStore, attackerId: string
 ): Partial<IGameStore> => {
@@ -23,6 +40,13 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 		useDamageStore
 			.getState()
 			.addDamage(isAttackerPlayer ? 'opponent' : 'player', attacker.attack);
+
+		// Воспроизводим звук в зависимости от того, кто атакует
+		if (isAttackerPlayer) {
+			useSoundStore.getState().playOpponentScream();
+		} else {
+			useSoundStore.getState().playPlayerScream();
+		}
 
 		if (opponent.health <= 0) {
 			state.isGameOver = true;

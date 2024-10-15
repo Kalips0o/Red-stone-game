@@ -1,4 +1,5 @@
 import { type IGameStore } from "../game.types";
+import { useSoundStore } from "./hero-attack";
 
 // Экшен для разыгрывания карты
 export const playCardAction = (
@@ -42,6 +43,9 @@ export const playCardAction = (
 
         // Добавляем карту в конец колоды (обновляем её местоположение)
         currentPlayer.deck.push(currentCard);
+
+        // Воспроизводим звук выкладывания карты на стол
+        useSoundStore.getState().playCardOnTable();
 
         // Логируем успешное разыгрывание карты
         console.log(`Карта ${currentCard.name} разыграна успешно.`);

@@ -1,5 +1,6 @@
 import type { IGameCard, IGameStore } from "../game.types";
 import { useDamageStore } from "./damage.store";
+import { useSoundStore } from "./hero-attack";
 import { create } from 'zustand';
 
 // Создаем новый стор для управления анимацией удаления карт
@@ -53,6 +54,8 @@ export const attackCardAction = (
     // Добавляем урон для отображения на экране
     useDamageStore.getState().addDamage(targetId, damageToTarget);
     useDamageStore.getState().addDamage(attackerId, damageToAttacker);
+
+    useSoundStore.getState().playCardAttack();
 
     // Обновляем колоды
     const newAttackerDeck = [...attackerDeck];
