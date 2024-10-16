@@ -89,3 +89,33 @@ h1 {
 	animation: shake 0.5s;
 	animation-iteration-count: 1;
   }
+
+  @keyframes dragonFlight {
+	0% {
+	  transform: translate(-100%, 20px) scale(0.5); /* Начальная позиция с небольшим смещением вверх */
+	  opacity: 0.4; /* Полупрозрачный */
+	}
+	10% {
+	  transform: translate(5vw, 10px) scale(0.8); /* Небольшое поднятие и увеличение */
+	  opacity: 0.8; /* Более видимый */
+	}
+	20% {
+	  transform: translate(15vw, -10px) scale(1.1); /* Дракон поднимается чуть выше */
+	  opacity: 0.95; /* Полная видимость */
+	}
+	50% {
+	  transform: translate(50vw, 10px) scale(1.4); /* Средняя точка полета, прямая траектория */
+	}
+	75% {
+	  transform: translate(75vw, 60px) scale(1.8); /* Небольшое опускание перед концом */
+	}
+	100% {
+	  transform: translate(110vw, 80px) scale(2); /* Полет заканчивается с опусканием */
+	}
+  }
+  
+  .animate-dragon-flight {
+	animation: dragonFlight 45s ease-in-out forwards; /* Плавная анимация с увеличением и изменением траектории */
+  }
+  
+  

@@ -1,5 +1,5 @@
 import { MAX_MANA } from "@/constants/game/core.constants";
-import {useGameStore} from "../../../store/game/game.store";
+import { useGameStore } from "../../../store/game/game.store";
 import { GridBoardCards } from "./board-card/GridBoardCard";
 import { HandCard } from "./hand-card/HandCard";
 import { PlayerInfo } from "./player-info/PlayerInfo";
@@ -7,15 +7,14 @@ import { PlayerMana } from "./player-info/PlayerMana";
 import { AudioPlayer } from "./audio-player/AudioPlayer";
 import { EndTurnButton } from "./EndTurnButton";
 import { SectionSide } from "./SectionSide";
+import { DragonAnimation } from "@/components/DragonAnimation";
 
 export function GameBoard() {
   const { player, opponent, playCard } = useGameStore();
 
   return (
-    <div
-      className="relative h-screen w-full "
-     
-    >
+    <div className="relative h-screen w-full">
+      <DragonAnimation />
       <SectionSide isPlayer={false}>
         <div >
           <PlayerInfo player={opponent} typePlayer="opponent" />

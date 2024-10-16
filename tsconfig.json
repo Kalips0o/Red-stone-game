@@ -26,8 +26,9 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-      "allowSyntheticDefaultImports": true
+      "allowSyntheticDefaultImports": true,
+      "typeRoots": ["./node_modules/@types", "./src/types"]
     },
-	"include": ["src", "src/global.d.ts"],
+	"include": ["src", "src/global.d.ts", "src/types/**/*.ts"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }
