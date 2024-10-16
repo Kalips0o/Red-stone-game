@@ -7,7 +7,7 @@ import { useGameStore } from '@/store/game/game.store';
 import { useSelectAttacker } from '@/store/game/actions/select-attacker';
 import { EnumTypeCard } from '@/card.types';
 import { DamageList } from '../DamageList';
-
+import { useState, useEffect } from 'react';
 
 interface Props {
   player: Omit<IHero, 'deck'>;
@@ -18,6 +18,7 @@ export function PlayerInfo({ player, typePlayer }: Props) {
   const { cardAttackerId } = useSelectAttacker();
   const { handleSelectTarget } = useEnemyTarget();
   const { currentTurn, opponent } = useGameStore();
+  const [isShaking, setIsShaking] = useState(false);
 
   const opponentTaunt = opponent.deck.find(
     (card) => card.type === EnumTypeCard.taunt && card.isOnBoard
@@ -28,8 +29,20 @@ export function PlayerInfo({ player, typePlayer }: Props) {
   const handleClick = () => {
     if (!isPlayer && cardAttackerId && !opponentTaunt) {
       handleSelectTarget(typePlayer, true);
+      if (!isPlayer) {
+        setIsShaking(true);
+      }
     }
   };
+
+  useEffect(() => {
+    if (isShaking) {
+      const timer = setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isShaking]);
 
   return (
     <button
@@ -45,7 +58,10 @@ export function PlayerInfo({ player, typePlayer }: Props) {
       onClick={handleClick}
     >
       <img
-        className={isPlayer ? "" : "rounded-full"}
+        className={cn(
+          isPlayer ? "" : "rounded-full",
+          { 'shake': !isPlayer && isShaking }
+        )}
         width={isPlayer ? 250 : 220}
         src={isPlayer ? '/src/assets/heroes/player.png' : '/src/assets/heroes/opponent.png'}
         alt="avatar"

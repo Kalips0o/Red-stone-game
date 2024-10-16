@@ -48,6 +48,14 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 		// Воспроизводим звук в зависимости от того, кто атакует
 		if (isAttackerPlayer) {
 			useSoundStore.getState().playOpponentScream();
+			// Вызываем анимацию тряски для оппонента
+			const opponentImage = document.querySelector('.right-10.top-2 img');
+			if (opponentImage) {
+				opponentImage.classList.add('shake');
+				setTimeout(() => {
+					opponentImage.classList.remove('shake');
+				}, 500);
+			}
 		} else {
 			useSoundStore.getState().playPlayerScream();
 		}
