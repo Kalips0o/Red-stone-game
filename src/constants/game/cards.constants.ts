@@ -148,7 +148,7 @@ export const CARDS: ICard[] = [
 	{
 		name: 'Three js',
 		mana: 6,
-		attack: 8,
+		attack: 5,
 		health: 3,
 		imageUrl: '/src/assets/cards/three-js.png',
 	},
@@ -208,8 +208,9 @@ export const CARDS: ICard[] = [
 	{
 		name: 'D3.js',
 		mana: 3,
-		attack: 7,
+		attack: 2,
 		health: 8,
+		type: EnumTypeCard.taunt,
 		imageUrl: '/src/assets/cards/d3.png',
 	},
 	{
@@ -224,6 +225,7 @@ export const CARDS: ICard[] = [
 		mana: 2,
 		attack: 4,
 		health: 2,
+		type: EnumTypeCard.taunt,
 		imageUrl: '/src/assets/cards/electron.png',
 	},
 	{
@@ -245,6 +247,7 @@ export const CARDS: ICard[] = [
 		mana: 2,
 		attack: 3,
 		health: 5,
+		type: EnumTypeCard.taunt,
 		imageUrl: '/src/assets/cards/stencil.png',
 	},
 	{
@@ -259,27 +262,29 @@ export const CARDS: ICard[] = [
 		mana: 2,
 		attack: 1,
 		health: 6,
+		type: EnumTypeCard.taunt,
 		imageUrl: '/src/assets/cards/grunt.png',
 	},
 	{
 		name: 'Handlebars',
 		mana: 2,
-		attack: 6,
+		attack: 2,
 		health: 1,
 		imageUrl: '/src/assets/cards/handlebars.png',
 	},
 	{
 		name: 'Firebase',
 		mana: 2,
-		attack: 2,
+		attack: 4,
 		health: 5,
 		imageUrl: '/src/assets/cards/firebase.png',
 	},
 	{
 		name: 'GraphQL',
 		mana: 2,
-		attack: 5,
+		attack: 1,
 		health: 3,
+		type: EnumTypeCard.taunt,
 		imageUrl: '/src/assets/cards/graphQL.png',
 	},
 ]
