@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button/Button";
 import { useGameStore } from "@/store/game/game.store";
 
 export function EndTurnButton() {
-    const {endTurn, currentTurn} = useGameStore()
-
+    const {endTurn, currentTurn, isGameOver, player, opponent} = useGameStore()
 
     const isOpponentTurn = currentTurn === "opponent"
+    const isGameEnded = isGameOver || player.health <= 0 || opponent.health <= 0
+    const isDisabled = isOpponentTurn || isGameEnded
 
     return <Button 
     className="absolute 
@@ -13,10 +14,10 @@ export function EndTurnButton() {
     style={{
         top: -29.25
     }}
-    variant={ isOpponentTurn ? 'disabled' : 'primary'} 
-    disabled={isOpponentTurn}
-    onClick={isOpponentTurn ? ()=> null : endTurn}
+    variant={ isDisabled ? 'disabled' : 'primary'} 
+    disabled={isDisabled}
+    onClick={isDisabled ? ()=> null : endTurn}
     >
-    {isOpponentTurn ? 'Opponent Turn' : 'End Turn'}
+    {isOpponentTurn ? 'Opponent Turn' : isGameEnded ? 'Game Over' : 'End Turn'}
     </Button>
 }

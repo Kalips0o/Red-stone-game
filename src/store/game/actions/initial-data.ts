@@ -6,14 +6,15 @@ export const initialPlayerData: IHero = {
 	mana: 1,
 }
 
-export const initialGameData:Omit<
+export const initialGameData: Omit<
 IGameStore,
 keyof IGameFnStore
  > = {
 	player: initialPlayerData,
-	opponent:initialPlayerData,
+	opponent: initialPlayerData,
 	currentTurn: 'player',
 	isGameOver: false,
 	isGameStarted: true,
-    turn: 1,
+	turn: 1,
+	isPlayerTurnNotified: true,
 }

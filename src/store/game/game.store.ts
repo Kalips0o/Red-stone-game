@@ -12,7 +12,7 @@ import { randomOpponentPlay } from './actions/opponent-core-game/random-opponent
 
 
 
-const useGameStore = create<IGameStore>(set => ({
+const useGameStore = create<IGameStore>((set) => ({
     // Инициализируем данные игры, используя данные из initialGameData
     ...initialGameData,
     
@@ -25,14 +25,12 @@ const useGameStore = create<IGameStore>(set => ({
     // Экшен для завершения хода
     endTurn: () => {
         set(state => {
-            // Если игра завершена, не выполняем никаких действий
-            if (state.isGameOver) {
-                return state;
+            if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
+                return { ...state, isGameOver: true };
             }
             
             const updatedState = endTurnAction(state);
             
-            // Запускаем ход оппонента только если игра не завершена
             if (!updatedState.isGameOver) {
                 setTimeout(() => {
                     set(state => {
@@ -55,27 +53,55 @@ const useGameStore = create<IGameStore>(set => ({
 
     // Экшен для разыгрывания карты, идентифицируем карту по её id
     playCard: (cardId: string) => {
-        // Обновляем состояние игры с учетом разыгранной карты
-        set((state) => playCardAction(state, cardId));
+        set((state) => {
+            if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
+                return state;
+            }
+            return playCardAction(state, cardId);
+        });
     },
 
     // Экшен для возвращения карты в руку игрока, идентифицируем карту по её id
     returnCard: (cardId: string) => {
-        // Обновляем состояние игры с учетом возвращенной карты
-        set((state) => returnCardAction(state, cardId));
+        set((state) => {
+            if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
+                return state;
+            }
+            return returnCardAction(state, cardId);
+        });
     },
 
     // Экшен для атаки карты, идентифицируем атакующего и цель по их id
     attackCard: (attackerId: string, targetId: string) => {
-        // Обновляем состояние игры с учетом атаки карты
-        set((state) => attackCardAction(state, attackerId, targetId));
+        set((state) => {
+            if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
+                return state;
+            }
+            const newState = attackCardAction(state, attackerId, targetId);
+            if (newState.player?.health <= 0 || newState.opponent?.health <= 0) {
+                newState.isGameOver = true;
+            }
+            return newState;
+        });
     },
 
     // Экшен для атаки героя противника, идентифицируем атакующего по его id
     attackHero: (attackerId: string) => {
-        // Обновляем состояние игры с учетом атаки героя
-        set((state) => attackHeroAction(state, attackerId));
+        set((state) => {
+            if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
+                return state;
+            }
+            const newState = attackHeroAction(state, attackerId);
+            if (newState.player && newState.opponent) {
+                if (newState.player.health <= 0 || newState.opponent.health <= 0) {
+                    newState.isGameOver = true;
+                }
+            }
+            return newState;
+        });
     },
+
+    isGameOver: false,
 }));
 
 // Экспортируем состояние игры для использования в других частях приложения

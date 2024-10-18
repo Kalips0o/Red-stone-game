@@ -4,6 +4,7 @@ import { useNotificationStore } from '@/store/notiffication/notification.store'
 import { useDamageStore } from './damage.store'
 import { EnumTypeCard } from '@/card.types'
 import create from 'zustand'
+import { useGameStore } from '../game.store'
 
 interface ISoundStore {
   playPlayerScream: () => void;
@@ -35,8 +36,9 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 		card => card.type === EnumTypeCard.taunt && card.isOnBoard
 	);
 
-	if (attacker && attacker.isCanAttack && !opponentTaunt) {
-		opponent.health -= attacker.attack;
+	// Добавляем проверку, что здоровье оппонента больше 0
+	if (attacker && attacker.isCanAttack && !opponentTaunt && opponent.health > 0) {
+		opponent.health = Math.max(0, opponent.health - attacker.attack);
 		attacker.isCanAttack = false;
 
 		console.log(`${isAttackerPlayer ? 'Player' : 'Opponent'} attacked hero and dealt ${attacker.attack} damage!`);
@@ -61,24 +63,28 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 		}
 
 		if (opponent.health <= 0) {
-			state.isGameOver = true;
-			state.isGameStarted = false;
+			// Задержка перед завершением игры
+			setTimeout(() => {
+				useGameStore.setState(state => ({
+					...state,
+					isGameOver: true,
+					isGameStarted: false
+				}));
 
-			console.log(`${isAttackerPlayer ? 'Player' : 'Opponent'} wins the game!`);
+				console.log(`${isAttackerPlayer ? 'Player' : 'Opponent'} wins the game!`);
 
-			useNotificationStore
-				.getState()
-				.show(
-					isAttackerPlayer ? 'You win' : 'You lose',
-					isAttackerPlayer ? 'win' : 'lose'
-				);
+				useNotificationStore
+					.getState()
+					.show(
+						isAttackerPlayer ? 'You win' : 'You lose',
+						isAttackerPlayer ? 'win' : 'lose'
+					);
+			}, 5000); // 5 секунд задержки
 		}
 	}
 
 	return {
 		player: state.player,
 		opponent: state.opponent,
-		isGameOver: state.isGameOver,
-		isGameStarted: state.isGameStarted
 	};
 };

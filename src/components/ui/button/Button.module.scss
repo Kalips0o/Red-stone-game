@@ -1,12 +1,15 @@
 .button {
-  @apply py-3 px-5 rounded-lg primary-gradient text-[#D06E14] font-bold text-xl transition-all duration-300 ease-in-out cursor-pointer;
+  @apply py-3 px-5 rounded-lg primary-gradient text-[#D06E14] font-bold text-xl transition-all duration-300 ease-in-out;
 
   &:hover,
   &.active {
     @apply text-brown-500;
     box-shadow: 0 2.5px 0 #b23909;
+    cursor: url('/src/assets/cursors/Cursor.cur'), pointer; 
   }
 
+
+  
   &.secondary {
     @apply secondary-gradient text-[#ffb057];
     box-shadow: -1px 3px 0 #642206;
@@ -29,35 +32,33 @@
 
   &.start {
     height: 5rem;
-    width:  5rem;
-  
+    width: 5rem;
+
     border-radius: 50% 0% 50% 50%;
-    
+
     transform: rotate(-46deg);
-    display: flex;              
-    justify-content: center;    
-    align-items: center;         
-    position: relative;          
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     color: #cdcbc8;
     background: radial-gradient(circle, rgba(61, 56, 163, 0.308) 0%, rgba(81, 81, 228, 0.21) 44%, rgba(10, 10, 56, 0.644) 83%);
-    
-    
+
     &::after {
-      content: '';               
-      position: absolute;       
-      top: 0;                  
-      left: 0;                 
-      right: 0;                
-      bottom: 0;               
-      border-radius: inherit;   
-      opacity: 0;              
-      transition: opacity 0.3s; 
-      z-index: -1;              
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: -1;
     }
 
-  
     span {
-      transform: rotate(47deg); 
+      transform: rotate(47deg);
     }
 
     animation: glowing 2.5s infinite alternate;

@@ -32,7 +32,7 @@ const destroyAnimation = {
 
 export function BoardCard({ card, isPlayerSide }: Props) {
   const { handleSelectTarget } = useEnemyTarget();
-  const { returnCard, currentTurn, isPlayerTurnNotified, attackCard } = useGameStore();
+  const { returnCard, currentTurn, isPlayerTurnNotified, attackCard, isGameOver } = useGameStore();
   const { setCardAttackerId, cardAttackerId } = useSelectAttacker();
   const [isHovered, setIsHovered] = useState(false);
   const [isDestroying, setIsDestroying] = useState(false);
@@ -47,6 +47,8 @@ export function BoardCard({ card, isPlayerSide }: Props) {
   }, [cardsToRemove, card.id]);
 
   const handleClick = (cardId: string) => {
+    if (isGameOver) return;  // Добавляем проверку на окончание игры
+
     if (isPlayerSide) {
       if (card.isCanAttack) {
         setCardAttackerId(cardId);
@@ -91,7 +93,7 @@ export function BoardCard({ card, isPlayerSide }: Props) {
     }
   };
 
-  const canEnlarge = currentTurn === "player" && isPlayerTurnNotified && !message;
+  const canEnlarge = currentTurn === "player" && isPlayerTurnNotified && !message && !isGameOver;
 
   return (
     <AnimatePresence>
@@ -99,17 +101,17 @@ export function BoardCard({ card, isPlayerSide }: Props) {
         <motion.div
           className={cn("h-[11.3rem] w-32 rounded-lg border-2 border-transparent border-solid transition-colors relative", 
             {
-              'cursor-pointer !border-green-400 shadow-2xl': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player",
+              'cursor-pointer !border-green-400 shadow-2xl': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player" && !isGameOver,
               '!border-primary shadow-2xl': isSelectPlayerAttacker,
               '!border-red-400': !isPlayerSide && cardAttackerId,
-              'cursor-not-allowed': currentTurn !== 'player'
+              'cursor-not-allowed': currentTurn !== 'player' || isGameOver
             }
           )}
           variants={cardVariants}
           initial="initial"
           animate="animate"
           whileHover={canEnlarge ? "hover" : "animate"}
-          onClick={() => (currentTurn !== 'player' ? null : handleClick(card.id))}
+          onClick={() => (currentTurn !== 'player' || isGameOver ? null : handleClick(card.id))}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           style={{ zIndex: isHovered && canEnlarge ? 10 : 'auto' }}

@@ -7,7 +7,7 @@ export const DragonAnimation = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 2000);
+    }, 70000);
 
     return () => clearTimeout(timer);
   }, []);

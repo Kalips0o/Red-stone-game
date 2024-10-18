@@ -9,6 +9,10 @@ import { EnumTypeCard } from '@/card.types';
 import { DamageList } from '../DamageList';
 import { useState, useEffect } from 'react';
 
+
+import './Player.scss';
+import StunnedAnimation from './StunnedAnimation';
+
 interface Props {
   player: Omit<IHero, 'deck'>;
   typePlayer: TPlayer;
@@ -25,9 +29,10 @@ export function PlayerInfo({ player, typePlayer }: Props) {
   );
 
   const isPlayer = typePlayer === 'player';
+  const isStunned = player.health <= 0;
 
   const handleClick = () => {
-    if (!isPlayer && cardAttackerId && !opponentTaunt) {
+    if (!isPlayer && cardAttackerId && !opponentTaunt && !isStunned) {
       handleSelectTarget(typePlayer, true);
       if (!isPlayer) {
         setIsShaking(true);
@@ -44,30 +49,42 @@ export function PlayerInfo({ player, typePlayer }: Props) {
     }
   }, [isShaking]);
 
+  const getHeroImage = () => {
+    if (isPlayer) {
+      return isStunned ? '/src/assets/heroes/playerLose.png' : '/src/assets/heroes/player.png';
+    } else {
+      return isStunned ? '/src/assets/heroes/opponentLose.png' : '/src/assets/heroes/opponent.png';
+    }
+  };
+
   return (
     <button
       className={cn(
-        'absolute z-[1] border-4 border-transparent transition-colors rounded-full cursor-default', 
+        'absolute z-[1] border-4 border-transparent transition-colors rounded-full cursor-default',
         {
           'left-9 -bottom-1': isPlayer,
           'right-10 top-2': !isPlayer,
-          '!border-red-500 !cursor-pointer shadow-[0_0_15px_5px_rgba(255,0,0,0.7)]': !isPlayer && cardAttackerId && !opponentTaunt,
+          '!border-red-500 !cursor-pointer shadow-[0_0_15px_5px_rgba(255,0,0,0.7)]': !isPlayer && cardAttackerId && !opponentTaunt && !isStunned,
         }
       )}
-      disabled={isPlayer || currentTurn === 'opponent'}
+      disabled={isPlayer || currentTurn === 'opponent' || isStunned}
       onClick={handleClick}
     >
-      <img
-        className={cn(
-          isPlayer ? "" : "rounded-full",
-          { 'shake': !isPlayer && isShaking }
-        )}
-        width={isPlayer ? 250 : 220}
-        src={isPlayer ? '/src/assets/heroes/player.png' : '/src/assets/heroes/opponent.png'}
-        alt="avatar"
-        draggable={false}
-      />
-
+      <div className="relative player-image-container">
+        <img
+          className={cn(
+            isPlayer ? "" : "rounded-full",
+            { 'shake': !isPlayer && isShaking }
+          )}
+          width={isPlayer ? 250 : 220}
+          src={getHeroImage()}
+          alt="avatar"
+          draggable={false}
+        />
+        
+        {isStunned && <StunnedAnimation isPlayer={isPlayer} />}
+      </div>
+    
       <div
         className={cn(
           'absolute w-full flex justify-center items-center',
@@ -76,7 +93,7 @@ export function PlayerInfo({ player, typePlayer }: Props) {
       >
         <Badge value={player.health} color="red" maxValue={MAX_HP} />
       </div>
-
+    
       <DamageList id={typePlayer} isRight={isPlayer} />
     </button>
   );

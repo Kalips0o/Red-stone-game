@@ -25,6 +25,7 @@ export interface IGameFnStore {
 	returnCard: (cardId: string) => void
 	attackCard: (attackerId: string, targetId: string) => void
 	attackHero: (attackerId: string) => void
+	
 
 }
 
