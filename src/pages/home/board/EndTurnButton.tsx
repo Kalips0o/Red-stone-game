@@ -6,7 +6,7 @@ export function EndTurnButton() {
 
     const isOpponentTurn = currentTurn === "opponent"
     const isGameEnded = isGameOver || player.health <= 0 || opponent.health <= 0
-    const isDisabled = isOpponentTurn || isGameEnded
+    const isDisabled = isOpponentTurn || isGameEnded || player.health <= 0
 
     return <Button 
     className="absolute 
@@ -18,6 +18,6 @@ export function EndTurnButton() {
     disabled={isDisabled}
     onClick={isDisabled ? ()=> null : endTurn}
     >
-    {isOpponentTurn ? 'Opponent Turn' : isGameEnded ? 'Game Over' : 'End Turn'}
+    {isOpponentTurn ? 'Opponent Turn' : isGameEnded ? 'Game Over' : player.health <= 0 ? 'You Lost' : 'End Turn'}
     </Button>
 }

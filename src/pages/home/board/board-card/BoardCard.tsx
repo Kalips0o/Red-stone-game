@@ -32,7 +32,7 @@ const destroyAnimation = {
 
 export function BoardCard({ card, isPlayerSide }: Props) {
   const { handleSelectTarget } = useEnemyTarget();
-  const { returnCard, currentTurn, isPlayerTurnNotified, attackCard } = useGameStore();
+  const { returnCard, currentTurn, isPlayerTurnNotified, attackCard, opponent } = useGameStore();
   const { setCardAttackerId, cardAttackerId } = useSelectAttacker();
   const [isHovered, setIsHovered] = useState(false);
   const [isDestroying, setIsDestroying] = useState(false);
@@ -66,9 +66,9 @@ export function BoardCard({ card, isPlayerSide }: Props) {
 
   const cardVariants = {
     initial: { 
-      scale: 0.8, 
-      rotate: isPlayerSide ? 20 : -20, 
-      y: isPlayerSide ? 100 : -100, 
+      scale: 0.5, 
+      rotate: isPlayerSide ? 15 : -15, 
+      y: isPlayerSide ? 200 : -200, 
       opacity: 0 
     },
     animate: {
@@ -78,10 +78,10 @@ export function BoardCard({ card, isPlayerSide }: Props) {
       opacity: 1,
       transition: { 
         type: 'spring', 
-        stiffness: 100, 
-        damping: 15, 
-        mass: 0.8,
-        duration: 0.6
+        stiffness: 150, 
+        damping: 20, 
+        mass: 1,
+        duration: 0.5
       }
     },
     hover: {
@@ -93,35 +93,30 @@ export function BoardCard({ card, isPlayerSide }: Props) {
 
   const canEnlarge = currentTurn === "player" && isPlayerTurnNotified && !message;
 
+  const isOpponentDefeated = opponent.health <= 0;
+
   return (
     <AnimatePresence>
       {!isDestroying && (
         <motion.div
           className={cn("h-[11.3rem] w-32 rounded-lg border-2 border-transparent border-solid transition-colors relative", 
             {
-              'cursor-pointer !border-green-400 shadow-2xl': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player",
-              '!border-primary shadow-2xl': isSelectPlayerAttacker,
-              '!border-red-400': !isPlayerSide && cardAttackerId,
-              'cursor-not-allowed': currentTurn !== 'player'
+              'cursor-pointer !border-green-400 shadow-2xl': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player" && !isOpponentDefeated,
+              '!border-primary shadow-2xl': isSelectPlayerAttacker && !isOpponentDefeated,
+              '!border-red-400': !isPlayerSide && cardAttackerId && !isOpponentDefeated,
+              'cursor-not-allowed': currentTurn !== 'player' || isOpponentDefeated
             }
           )}
           variants={cardVariants}
           initial="initial"
           animate="animate"
-          whileHover={canEnlarge ? "hover" : "animate"}
-          onClick={() => (currentTurn !== 'player' ? null : handleClick(card.id))}
+          whileHover={canEnlarge && !isOpponentDefeated ? "hover" : "animate"}
+          onClick={() => (currentTurn !== 'player' || isOpponentDefeated ? null : handleClick(card.id))}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          style={{ zIndex: isHovered && canEnlarge ? 10 : 'auto' }}
+          style={{ zIndex: isHovered && canEnlarge && !isOpponentDefeated ? 10 : 'auto' }}
         >
-          <Card 
-            mana={card.mana} 
-            attack={card.attack} 
-            health={card.health} 
-            imageUrl={card.imageUrl} 
-            isHovered={isHovered && canEnlarge} 
-            isOnBoard={true}
-          />
+          <Card mana={card.mana} attack={card.attack} health={card.health} imageUrl={card.imageUrl} isHovered={isHovered && canEnlarge} />
           <DamageList id={card.id} isRight /> 
         </motion.div>
       )}
