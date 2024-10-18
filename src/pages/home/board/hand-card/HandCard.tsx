@@ -83,6 +83,7 @@ export function HandCard({
   health={card.health}
   imageUrl={isHided ? '/src/assets/cards/cover.png' : card.imageUrl}
   isInHand={true}
+  isHovered={isHovered}
 />
   </motion.button>
   
