@@ -17,7 +17,7 @@ export default defineConfig({
 				theme_color: '#123c64',
 				icons: [
 					{
-						src: '/favicons/192x192.png',
+						src: '/public/favicons/192x192.png',
 						sizes: '192x192',
 						type: 'image/png',
 					},
@@ -43,11 +43,11 @@ export default defineConfig({
 			workbox: {
 				globPatterns: ['**/*.{js,css,html,ico,svg,jpg}'],
 				maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, 
-				exclude: [/bg-.*\.png$/, /start-img-.*\.png$/],
-			} as any,
+			},
 			devOptions: {
 				enabled: true,
 			},
+			exclude: [/bg-.*\.png$/, /start-img-.*\.png$/],
 		}),
 	],
 	resolve: {
