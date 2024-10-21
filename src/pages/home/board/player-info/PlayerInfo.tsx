@@ -63,7 +63,7 @@ export function PlayerInfo({ player, typePlayer }: Props) {
         'absolute z-[1] border-4 border-transparent transition-colors rounded-full cursor-default player-info',
         {
           'player-info--left': isPlayer,
-          'player-info--right': !isPlayer,
+          'player-info--right ': !isPlayer,
           '!border-red-500 !cursor-pointer shadow-[0_0_15px_5px_rgba(255,0,0,0.7)]': !isPlayer && cardAttackerId && !opponentTaunt && !isStunned,
         }
       )}
@@ -73,10 +73,10 @@ export function PlayerInfo({ player, typePlayer }: Props) {
       <div className="relative player-image-container">
         <img
           className={cn(
-            "rounded-full player-image", 
+            " player-image", 
             { 
               'player-image--player': isPlayer,
-              'player-image--opponent': !isPlayer,
+              'player-image--opponent rounded-full': !isPlayer,
               'shake': !isPlayer && isShaking 
             }
           )}
