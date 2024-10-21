@@ -6,7 +6,6 @@ import random from "lodash/random";
 import { MAX_MANA } from "@/constants/game/core.constants";
 import { playRandomCard } from "./play-random-card";
 
-
 // Функция для выполнения случайного хода противника
 export const randomOpponentPlay = (state: IGameStore) => {
     const opponent = state.opponent; // Получаем состояние противника

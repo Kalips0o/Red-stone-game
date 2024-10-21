@@ -36,7 +36,6 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 		card => card.type === EnumTypeCard.taunt && card.isOnBoard
 	);
 
-	// Добавляем проверку, что здоровье оппонента больше 0
 	if (attacker && attacker.isCanAttack && !opponentTaunt && opponent.health > 0) {
 		opponent.health = Math.max(0, opponent.health - attacker.attack);
 		attacker.isCanAttack = false;
@@ -47,10 +46,8 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 			.getState()
 			.addDamage(isAttackerPlayer ? 'opponent' : 'player', attacker.attack);
 
-		// Воспроизводим звук в зависимости от того, кто атакует
 		if (isAttackerPlayer) {
 			useSoundStore.getState().playOpponentScream();
-			// Вызываем анимацию тряски для оппонента
 			const opponentImage = document.querySelector('.right-10.top-2 img');
 			if (opponentImage) {
 				opponentImage.classList.add('shake');
@@ -63,7 +60,6 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 		}
 
 		if (opponent.health <= 0) {
-			// Задержка перед завершением игры
 			setTimeout(() => {
 				useGameStore.setState(state => ({
 					...state,
@@ -79,7 +75,7 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 						isAttackerPlayer ? 'You win' : 'You lose',
 						isAttackerPlayer ? 'win' : 'lose'
 					);
-			}, 5000); // 5 секунд задержки
+			}, 5000);
 		}
 	}
 
