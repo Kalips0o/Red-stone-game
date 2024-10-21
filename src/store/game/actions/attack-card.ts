@@ -32,7 +32,6 @@ export const attackCardAction = (
   const targetIndex = targetDeck.findIndex(card => card.id === targetId);
 
   if (attackerIndex === -1 || targetIndex === -1) {
-    console.error("Attacker or target card not found");
     return state;
   }
 
@@ -40,24 +39,19 @@ export const attackCardAction = (
   const target = { ...targetDeck[targetIndex] };
 
   if (attacker && target && attacker.isCanAttack) {
-    // Рассчитываем урон
     const damageToTarget = attacker.attack;
     const damageToAttacker = target.attack;
 
-    // Наносим урон
     target.health -= damageToTarget;
     attacker.health -= damageToAttacker;
 
-    // Отмечаем, что атакующая карта больше не может атаковать в этом ходу
     attacker.isCanAttack = false;
 
-    // Добавляем урон для отображения на экране
     useDamageStore.getState().addDamage(targetId, damageToTarget);
     useDamageStore.getState().addDamage(attackerId, damageToAttacker);
 
     useSoundStore.getState().playCardAttack();
 
-    // Обновляем колоды
     const newAttackerDeck = [...attackerDeck];
     const newTargetDeck = [...targetDeck];
 
@@ -75,7 +69,6 @@ export const attackCardAction = (
       newAttackerDeck[attackerIndex] = attacker;
     }
 
-    // Создаем новое состояние
     const newState = { ...state };
     if (isAttackerPlayer) {
       newState.player = { ...newState.player, deck: newAttackerDeck };

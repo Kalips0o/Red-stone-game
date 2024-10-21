@@ -33,6 +33,7 @@
             "builtin",
             "external",
             "internal",
+            "type",
             [ "parent", "sibling", "index" ],
             "object"
         ],
@@ -44,7 +45,8 @@
             "group": "internal",
             "position": "before"
           }
-        ]
+        ],
+        "pathGroupsExcludedImportTypes": ["type"]
       }
     ]
   }

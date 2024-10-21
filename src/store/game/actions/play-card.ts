@@ -20,9 +20,6 @@ export const playCardAction = (
         currentPlayer.deck.splice(currentCardIndex, 1);
         currentPlayer.deck.push(currentCard);
         useSoundStore.getState().playCardOnTable();
-        console.log(`Карта ${currentCard.name} разыграна успешно.`);
-    } else {
-        console.log(`Недостаточно маны для разыгрывания карты ${currentCard.name}. Требуется: ${currentCard.mana}, Доступно: ${currentPlayer.mana}`);
     }
 
     return {

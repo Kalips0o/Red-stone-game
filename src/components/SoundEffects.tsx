@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import useSound from 'use-sound';
 import { useSoundStore } from '../store/game/actions/hero-attack';
 
@@ -13,16 +13,30 @@ export const SoundEffects: React.FC = () => {
   const [playWin] = useSound('/src/assets/music/endGame/win.mp3', { volume: 0.2 });
   const [playLose] = useSound('/src/assets/music/endGame/lose.mp3', { volume: 0.2 });
 
+  const initialized = useRef(false);
+
   useEffect(() => {
-    useSoundStore.setState({
-      playPlayerScream: () => Math.random() < 0.5 ? playPlayerScream1() : playPlayerScream2(),
-      playOpponentScream: () => Math.random() < 0.5 ? playOpponentScream1() : playOpponentScream2(),
-      playCardDeal: () => playCardDeal(),
-      playCardOnTable: () => playCardOnTable(),
-      playCardAttack: () => playCardAttack(),
-      playWin: () => playWin(),
-      playLose: () => playLose(),
-    });
+    if (!initialized.current) {
+      const initializeAudio = () => {
+        useSoundStore.setState({
+          playPlayerScream: () => Math.random() < 0.5 ? playPlayerScream1() : playPlayerScream2(),
+          playOpponentScream: () => Math.random() < 0.5 ? playOpponentScream1() : playOpponentScream2(),
+          playCardDeal: () => playCardDeal(),
+          playCardOnTable: () => playCardOnTable(),
+          playCardAttack: () => playCardAttack(),
+          playWin: () => playWin(),
+          playLose: () => playLose(),
+        });
+        initialized.current = true;
+        document.removeEventListener('click', initializeAudio);
+      };
+
+      document.addEventListener('click', initializeAudio);
+
+      return () => {
+        document.removeEventListener('click', initializeAudio);
+      };
+    }
   }, [playPlayerScream1, playPlayerScream2, playOpponentScream1, playOpponentScream2, playCardDeal, playCardOnTable, playCardAttack, playWin, playLose]);
 
   return null;

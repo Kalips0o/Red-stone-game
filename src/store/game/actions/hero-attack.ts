@@ -3,7 +3,7 @@ import { getCardById } from './attack-card'
 import { useNotificationStore } from '@/store/notiffication/notification.store'
 import { useDamageStore } from './damage.store'
 import { EnumTypeCard } from '@/card.types'
-import create from 'zustand'
+import { create } from 'zustand'
 import { useGameStore } from '../game.store'
 
 interface ISoundStore {
@@ -40,8 +40,6 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 		opponent.health = Math.max(0, opponent.health - attacker.attack);
 		attacker.isCanAttack = false;
 
-		console.log(`${isAttackerPlayer ? 'Player' : 'Opponent'} attacked hero and dealt ${attacker.attack} damage!`);
-
 		useDamageStore
 			.getState()
 			.addDamage(isAttackerPlayer ? 'opponent' : 'player', attacker.attack);
@@ -66,8 +64,6 @@ export const attackHeroAction = (state: IGameStore, attackerId: string
 					isGameOver: true,
 					isGameStarted: false
 				}));
-
-				console.log(`${isAttackerPlayer ? 'Player' : 'Opponent'} wins the game!`);
 
 				useNotificationStore
 					.getState()

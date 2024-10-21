@@ -1,0 +1,8 @@
+{
+  "routes": [
+    { "src": "/manifest.webmanifest", "dest": "/manifest.webmanifest" },
+    { "src": "/sw.js", "dest": "/sw.js" },
+    { "src": "/workbox-(.+)\\.js", "dest": "/workbox-$1.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
