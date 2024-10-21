@@ -81,7 +81,7 @@ export function HandCard({
   mana={card.mana}
   attack={card.attack}
   health={card.health}
-  imageUrl={isHided ? '/src/assets/cards/cover.png' : card.imageUrl}
+  imageUrl={isHided ? '/assets/cards/cover.png' : card.imageUrl}
   isInHand={true}
   isHovered={isHovered}
 />

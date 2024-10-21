@@ -17,7 +17,7 @@
 	line-height: 1.56;
 	font-size: 18px;
 	font-weight: 400;
-	background-image: url('/src/assets/bg.png');
+	background-image: url('/public/assets/bg.png');
 	color-scheme: light dark;
 	color: #333;
 	background-color: #123c64;
@@ -32,7 +32,7 @@
 }
 
 * {
-    cursor: url('/src/assets/cursors/Cursor.cur'), pointer;
+    cursor: url('/public/assets/cursors/Cursor.cur'), pointer;
 }
 
 a {
@@ -50,21 +50,21 @@ h1 {
 }
 
 .bg-image {
-	background-image: url('/src/assets/bg.png');
-	background-size: cover; 
+	background-image: url('/public/assets/bg.png');
+	background-size: cover;
 	background-position: center;
 }
 
 .start-img {
 	background-image: url('/src/assets/start-img.png');
-	background-size: cover; 
+	background-size: cover;
 	background-position: center;
 }
 
 .text-glow {
 	animation: glowing 2s infinite;
   }
-  
+
   @keyframes glowing {
     0% {
         text-shadow: 0 0 7px rgba(248, 6, 6, 0.89);
@@ -89,7 +89,7 @@ h1 {
 	90% { transform: translate(1px, 2px) rotate(0deg); }
 	100% { transform: translate(1px, -2px) rotate(-1deg); }
   }
-  
+
   .shake {
 	animation: shake 0.5s;
 	animation-iteration-count: 1;
@@ -101,21 +101,21 @@ h1 {
     opacity: 0.4;
   }
   10% {
-    transform: translate(5vw, 10px) scale(0.8); 
-    opacity: 1; 
+    transform: translate(5vw, 10px) scale(0.8);
+    opacity: 1;
   }
   20% {
-    transform: translate(20vw, -50px) scale(1.1); 
-    opacity: 0.95; 
+    transform: translate(20vw, -50px) scale(1.1);
+    opacity: 0.95;
   }
   50% {
-    transform: translate(50vw, -80px) scale(1.4); 
+    transform: translate(50vw, -80px) scale(1.4);
   }
   75% {
-    transform: translate(75vw, 60px) scale(1.8); 
+    transform: translate(75vw, 60px) scale(1.8);
   }
   100% {
-    transform: translate(110vw, 80px) scale(2); 
+    transform: translate(110vw, 80px) scale(2);
   }
 }
 

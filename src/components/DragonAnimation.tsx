@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import dragonGif from '../assets/dragon.gif'; 
+import dragonGif from '/assets/dragon.gif';
 
 export const DragonAnimation = () => {
   const [isVisible, setIsVisible] = useState(false);

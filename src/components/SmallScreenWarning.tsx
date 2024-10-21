@@ -9,7 +9,7 @@ const SmallScreenWarning: React.FC = () => {
       <p className="text-[1rem] w-[80%] text-gray-600 text-center mb-6">
       For the best gaming experience, please use a device with a larger screen.
       </p>
-      <img src="/src/assets/small-screen.png" alt="small screen dragonable=false" className="w-[22rem]"/>
+      <img src="/assets/small-screen.png" alt="small screen dragonable=false" className="w-[22rem]"/>
     </div>
   );
 };

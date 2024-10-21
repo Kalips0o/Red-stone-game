@@ -5,11 +5,11 @@
   &.active {
     @apply text-brown-500;
     box-shadow: 0 2.5px 0 #b23909;
-    cursor: url('/src/assets/cursors/Cursor.cur'), pointer; 
+    cursor: url('/public/assets/cursors/Cursor.cur'), pointer;
   }
 
 
-  
+
   &.secondary {
     @apply secondary-gradient text-[#ffb057];
     box-shadow: -1px 3px 0 #642206;

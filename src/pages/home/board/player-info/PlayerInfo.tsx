@@ -51,9 +51,9 @@ export function PlayerInfo({ player, typePlayer }: Props) {
 
   const getHeroImage = () => {
     if (isPlayer) {
-      return isStunned ? '/src/assets/heroes/playerLose.png' : '/src/assets/heroes/player.png';
+      return isStunned ? '/assets/heroes/playerLose.png' : '/assets/heroes/player.png';
     } else {
-      return isStunned ? '/src/assets/heroes/opponentLose.png' : '/src/assets/heroes/opponent.png';
+      return isStunned ? '/assets/heroes/opponentLose.png' : '/assets/heroes/opponent.png';
     }
   };
 
