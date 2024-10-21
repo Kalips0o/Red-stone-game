@@ -99,7 +99,7 @@ export function BoardCard({ card, isPlayerSide }: Props) {
     <AnimatePresence>
       {!isDestroying && (
         <motion.div
-          className={cn("h-[11.3rem] w-32 rounded-lg border-2 border-transparent border-solid transition-colors relative", 
+          className={cn("h-[11.3rem] w-32 rounded-lg border-2 border-transparent border-solid transition-colors relative no-drag", 
             {
               'cursor-pointer !border-green-400 shadow-2xl': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player" && !isOpponentDefeated,
               '!border-primary shadow-2xl': isSelectPlayerAttacker && !isOpponentDefeated,
@@ -114,7 +114,13 @@ export function BoardCard({ card, isPlayerSide }: Props) {
           onClick={() => (currentTurn !== 'player' || isOpponentDefeated ? null : handleClick(card.id))}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          style={{ zIndex: isHovered && canEnlarge && !isOpponentDefeated ? 10 : 'auto' }}
+          style={{ 
+            zIndex: isHovered && canEnlarge && !isOpponentDefeated ? 10 : 'auto',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+          }}
         >
           <Card mana={card.mana} attack={card.attack} health={card.health} imageUrl={card.imageUrl} isHovered={isHovered && canEnlarge} />
           <DamageList id={card.id} isRight /> 

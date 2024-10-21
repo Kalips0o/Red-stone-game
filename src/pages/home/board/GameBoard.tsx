@@ -32,6 +32,7 @@ export function GameBoard() {
                     arrayLength={array.length}
                     index={index}
                     isHided
+                    isOpponent={true}
                
                   />
                 ))}
@@ -72,6 +73,7 @@ style={{
                   index={index}
                   onClick={() => playCard(card.id)}
                   isDisabled={player.mana < card.mana}
+                  isOpponent={false}
                 />
               ))}
           </div>

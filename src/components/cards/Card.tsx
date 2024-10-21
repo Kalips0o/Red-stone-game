@@ -4,7 +4,10 @@ import type { IGameCard } from '@/store/game/game.types';
 import './Cards.scss';
 import { motion } from 'framer-motion';
 
-type CardStatsProps = Pick<ICard | IGameCard, 'mana' | 'attack' | 'health' | 'imageUrl'> & {
+type CardStatsProps = Pick<ICard | IGameCard, 'imageUrl'> & {
+  mana?: number;
+  attack?: number;
+  health?: number;
   isInHand?: boolean;
   isHovered?: boolean;
   isOnBoard?: boolean;
@@ -58,7 +61,6 @@ export const Card: React.FC<CardStatsProps> = ({
       <img 
         src={imageUrl} 
         alt='cover' 
-        draggable="false" 
         className='absolute top-0 left-0 w-full h-full object-cover'
       />
       <motion.div 
@@ -67,15 +69,21 @@ export const Card: React.FC<CardStatsProps> = ({
         initial="initial"
         animate="animate"
       >
-        <div className={`mana absolute top-1 left-1 ${isInHand ? 'mana-in-hand' : ''}`}>
-          {mana}
-        </div>
-        <div className={`attack absolute bottom-1 left-1 ${isInHand ? 'attack-in-hand' : ''}`}>
-          {attack}
-        </div>
-        <div className={`health absolute bottom-1 right-1 ${isInHand ? 'health-in-hand' : ''}`}>
-          {health}
-        </div>
+        {mana !== undefined && (
+          <div className={`mana absolute top-1 left-1 ${isInHand ? 'mana-in-hand' : ''}`}>
+            {mana}
+          </div>
+        )}
+        {attack !== undefined && (
+          <div className={`attack absolute bottom-1 left-1 ${isInHand ? 'attack-in-hand' : ''}`}>
+            {attack}
+          </div>
+        )}
+        {health !== undefined && (
+          <div className={`health absolute bottom-1 right-1 ${isInHand ? 'health-in-hand' : ''}`}>
+            {health}
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
