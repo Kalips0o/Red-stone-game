@@ -4,6 +4,18 @@ import './PWABadge.css'
 import { useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
+// Add this type declaration at the top of the file
+declare module 'virtual:pwa-register/react' {
+  export function useRegisterSW(options: {
+    onRegistered?: (registration: ServiceWorkerRegistration | undefined) => void;
+    onRegisterError?: (error: Error) => void;
+    onNeedRefresh?: () => void;
+  }): {
+    offlineReady: [boolean, (value: boolean) => void];
+    updateServiceWorker: (reloadPage?: boolean) => Promise<void>;
+  };
+}
+
 export function PWABadge() {
   const [needRefresh, setNeedRefresh] = useState(false)
   const {
