@@ -33,12 +33,15 @@ export default defineConfig({
 						purpose: 'maskable',
 					},
 					{
-						src: '/assets/favicons/512x512.jpg',
+						src: '/favicons/512x512.jpg',
 						sizes: '512x512',
 						type: 'image/jpg',
 						purpose: 'maskable',
 					},
 				],
+			},
+			workbox: {
+				globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg}'],
 			},
 			devOptions: {
 				enabled: true,
