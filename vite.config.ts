@@ -22,18 +22,18 @@ export default defineConfig({
 						type: 'image/png',
 					},
 					{
-						src: '/favicons/512x512.png',
+						src: '/public/favicons/512x512.png',
 						sizes: '512x512',
 						type: 'image/png',
 					},
 					{
-						src: '/favicons/192x192.jpg',
+						src: '/public/favicons/192x192.jpg',
 						sizes: '192x192',
 						type: 'image/jpg',
 						purpose: 'maskable',
 					},
 					{
-						src: '/favicons/512x512.jpg',
+						src: '/public/favicons/512x512.jpg',
 						sizes: '512x512',
 						type: 'image/jpg',
 						purpose: 'maskable',
@@ -41,8 +41,10 @@ export default defineConfig({
 				],
 			},
 			workbox: {
-				globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg}'],
-			},
+				globPatterns: ['**/*.{js,css,html,ico,svg,jpg}'],
+				maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, 
+				exclude: [/bg-.*\.png$/, /start-img-.*\.png$/],
+			} as any,
 			devOptions: {
 				enabled: true,
 			},
