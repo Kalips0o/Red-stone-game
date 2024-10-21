@@ -22,8 +22,8 @@ export default defineConfig({
 				name: 'RedStone',
 				short_name: 'RedStone',
 				description: 'Best card game',
-				theme_color: '#46B4AC',
-				background_color: '#46B4AC',
+				theme_color: '#123c64',
+				background_color: '#123c64',
 				display: 'standalone',
 				orientation: 'landscape-primary',
 				icons: [

@@ -8,10 +8,25 @@
 
 .game-title {
     position: absolute;
-    top: 2%;
+   
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
+    font-size: 1.6rem; 
+    text-align: center;
+    
+    @media (max-width: 1200px) {
+        font-size: 1.4rem;
+    }
+
+    @media (max-width: 1024px) {
+        font-size: 1.2rem; 
+    }
+  
+    @media (max-width: 1024px) {
+        font-size: 1.1rem; 
+    }
+  
 }
 
 .button-container {
@@ -130,4 +145,3 @@
         transform: translateY(calc(-100vh + -100%)) rotate(20deg);
     }
 }
-

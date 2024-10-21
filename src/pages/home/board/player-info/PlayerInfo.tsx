@@ -60,10 +60,10 @@ export function PlayerInfo({ player, typePlayer }: Props) {
   return (
     <button
       className={cn(
-        'absolute z-[1] border-4 border-transparent transition-colors rounded-full cursor-default',
+        'absolute z-[1] border-4 border-transparent transition-colors rounded-full cursor-default player-info',
         {
-          'left-9 -bottom-1': isPlayer,
-          'right-10 top-2': !isPlayer,
+          'player-info--left': isPlayer,
+          'player-info--right': !isPlayer,
           '!border-red-500 !cursor-pointer shadow-[0_0_15px_5px_rgba(255,0,0,0.7)]': !isPlayer && cardAttackerId && !opponentTaunt && !isStunned,
         }
       )}
@@ -73,10 +73,13 @@ export function PlayerInfo({ player, typePlayer }: Props) {
       <div className="relative player-image-container">
         <img
           className={cn(
-            isPlayer ? "" : "rounded-full",
-            { 'shake': !isPlayer && isShaking }
+            "rounded-full player-image", 
+            { 
+              'player-image--player': isPlayer,
+              'player-image--opponent': !isPlayer,
+              'shake': !isPlayer && isShaking 
+            }
           )}
-          width={isPlayer ? 250 : 220}
           src={getHeroImage()}
           alt="avatar"
           draggable={false}
@@ -87,8 +90,8 @@ export function PlayerInfo({ player, typePlayer }: Props) {
     
       <div
         className={cn(
-          'absolute w-full flex justify-center items-center',
-          isPlayer ? 'bottom-2.5' : '-bottom-1'
+          'absolute w-full flex justify-center items-center player-health',
+          isPlayer ? 'player-health--player' : 'player-health--opponent'
         )}
       >
         <Badge value={player.health} color="red" maxValue={MAX_HP} />
