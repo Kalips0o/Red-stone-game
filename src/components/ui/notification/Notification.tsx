@@ -5,16 +5,28 @@ import './Notification.scss'
 import { useEffect, useState } from 'react'
 
 export function Notification() {
-	const { message, type} = useNotificationStore()
+	const { message, type } = useNotificationStore()
 	const [isVisible, setIsVisible] = useState(false)
+	const [currentMessage, setCurrentMessage] = useState('')
+	const [currentType, setCurrentType] = useState<'win' | 'lose' | 'info'>('info')
 
 	useEffect(() => {
 		if (message) {
-			setIsVisible(true)
+			// Если новое сообщение - о победе или поражении, показываем его немедленно
+			if (type === 'win' || type === 'lose') {
+				setCurrentMessage(message)
+				setCurrentType(type)
+				setIsVisible(true)
+			} else if (!isVisible) {
+				// Если нет активного уведомления, показываем новое
+				setCurrentMessage(message)
+				setCurrentType(type)
+				setIsVisible(true)
+			}
 		} else {
 			setIsVisible(false)
 		}
-	}, [message])
+	}, [message, type])
 
 	return (
 		<AnimatePresence>
@@ -30,9 +42,9 @@ export function Notification() {
 						className={cn(
 							'rounded-lg py-2 px-4 w-max font-semibold text-[2rem] shadow-2xl text-gray-800 turn block',
 							{
-								'win': type === 'win',
-								'lose': type === 'lose',
-								'turn': type === 'info'
+								'win': currentType === 'win',
+								'lose': currentType === 'lose',
+								'turn': currentType === 'info'
 							}
 						)}
 						initial={{ opacity: 0, scale: 0.8 }}
@@ -40,7 +52,7 @@ export function Notification() {
 						exit={{ opacity: 0, scale: 1.2 }}
 						transition={{ duration: 0.6 }}
 					>
-						{type === 'info' && message}
+						{currentType === 'info' && currentMessage}
 					</motion.div>
 				</motion.div>
 			)}

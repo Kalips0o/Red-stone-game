@@ -20,7 +20,7 @@ const updateCardOnTheEndTurn = (deck: IGameCard[]) =>
 // Экшен для завершения хода
 export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
   // Если игра уже завершена или у игрока 0 HP, не выполняем никаких действий
-  if (state.isGameOver || state.player.health <= 0) {
+  if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
     return state;
   }
 
@@ -38,12 +38,8 @@ export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
   let newOpponentMana = state.opponent.mana;
 
   // Если следующий ход игрока, обновляем ману игрока и выводим уведомление
-  if (isNewTurnPlayer && !state.isGameOver) {
+  if (isNewTurnPlayer) {
     newPlayerMana = getNewMana(newTurnNumber);
-    // Проверяем, что игра не закончена и здоровье игрока больше 0 перед показом уведомления
-    if (state.player.health > 0) {
-      useNotificationStore.getState().show('Your turn');  // Уведомление о начале хода игрока
-    }
   } else {
     // Иначе обновляем ману оппонента
     newOpponentMana = getNewMana(newTurnNumber);
@@ -110,7 +106,10 @@ export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
     const message = winner === 'player' ? 'You win!' : 'You lose!';
     
     useNotificationStore.getState().show(message, winner === 'player' ? 'win' : 'lose');
+  } else if (isNewTurnPlayer && !updatedState.isGameOver) {
+    // Показываем уведомление о ходе игрока только если игра не закончена
+    useNotificationStore.getState().show('Your turn');
   }
 
-  return updatedState;  // Возвращаем обновленное состояние игры
+  return updatedState;
 };
