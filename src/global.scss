@@ -17,13 +17,9 @@
 	line-height: 1.56;
 	font-size: 18px;
 	font-weight: 400;
-	background-image: url('/assets/bg.png');
 	color-scheme: light dark;
 	color: #333;
-
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center;
+	background: radial-gradient(circle, rgb(30, 28, 52) 0%, rgb(3, 3, 28) 44%, rgba(10,10,56,1) 83%);
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;

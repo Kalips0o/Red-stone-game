@@ -13,14 +13,14 @@ export function GameBoard() {
   const { player, opponent, playCard } = useGameStore();
 
   return (
-    <div className="relative h-screen w-full">
+    <div className="relative h-screen w-full bg-image ">
       <DragonAnimation />
       <SectionSide isPlayer={false}>
         <div >
           <PlayerInfo player={opponent} typePlayer="opponent" />
 
           <PlayerMana currentMana={opponent.mana} maxMana={MAX_MANA} typePlayer={"opponent"} />
-          
+
           <div className="-top-12 absolute w-full">
             <div className="flex items-center justify-center">
               {opponent.deck
@@ -33,7 +33,7 @@ export function GameBoard() {
                     index={index}
                     isHided
                     isOpponent={true}
-               
+
                   />
                 ))}
             </div>
@@ -55,7 +55,7 @@ style={{
       <SectionSide isPlayer>
 
       <GridBoardCards deck={player.deck} isPlayerSide={true} />
-      
+
         <PlayerInfo player={player} typePlayer="player" />
 
         <PlayerMana currentMana={player.mana} maxMana={MAX_MANA} typePlayer={"player"} />
