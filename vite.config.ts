@@ -17,23 +17,23 @@ export default defineConfig({
 				theme_color: '#123c64',
 				icons: [
 					{
-						src: '/public/favicons/192x192.png',
+						src: '/favicons/192x192.png',
 						sizes: '192x192',
 						type: 'image/png',
 					},
 					{
-						src: '/public/favicons/512x512.png',
+						src: '/favicons/512x512.png',
 						sizes: '512x512',
 						type: 'image/png',
 					},
 					{
-						src: '/public/favicons/192x192.jpg',
+						src: '/favicons/192x192.jpg',
 						sizes: '192x192',
 						type: 'image/jpg',
 						purpose: 'maskable',
 					},
 					{
-						src: '/public/favicons/512x512.jpg',
+						src: '/favicons/512x512.jpg',
 						sizes: '512x512',
 						type: 'image/jpg',
 						purpose: 'maskable',
@@ -42,7 +42,7 @@ export default defineConfig({
 			},
 			workbox: {
 				globPatterns: ['**/*.{js,css,html,ico,svg,jpg}'],
-				maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, 
+				maximumFileSizeToCacheInBytes: 2 * 1024 * 1024,
 			},
 			devOptions: {
 				enabled: true,

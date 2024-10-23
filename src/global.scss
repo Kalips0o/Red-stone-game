@@ -17,10 +17,10 @@
 	line-height: 1.56;
 	font-size: 18px;
 	font-weight: 400;
-	background-image: url('/public/assets/bg.png');
+	background-image: url('/assets/bg.png');
 	color-scheme: light dark;
 	color: #333;
-	background-color: #123c64;
+
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -32,7 +32,7 @@
 }
 
 * {
-    cursor: url('/public/assets/cursors/Cursor.cur'), pointer;
+    cursor: url('/assets/cursors/Cursor.cur'), pointer;
 }
 
 a {
@@ -50,13 +50,13 @@ h1 {
 }
 
 .bg-image {
-	background-image: url('/public/assets/bg.png');
+	background-image: url('/assets/bg.png');
 	background-size: cover;
 	background-position: center;
 }
 
 .start-img {
-	background-image: url('/src/assets/start-img.png');
+	background-image: url('/assets/start-img.png');
 	background-size: cover;
 	background-position: center;
 }
