@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { MAX_MANA } from "@/constants/game/core.constants";
 import { useGameStore } from "../../../store/game/game.store";
 import { GridBoardCards } from "./board-card/GridBoardCard";
@@ -10,16 +10,21 @@ import { EndTurnButton } from "./EndTurnButton";
 import { SectionSide } from "./SectionSide";
 import { DragonAnimation } from "@/components/DragonAnimation";
 import { Loader } from "@/components/ui/loader/Loader";
+import { NoCardsMessage } from "./NoCardsMessage";
+import { AnimatePresence } from "framer-motion"; 
 
 export function GameBoard() {
-  const { player, opponent, playCard } = useGameStore();
+  const { player, opponent, playCard, turn } = useGameStore();
   const [isLoading, setIsLoading] = useState(true);
+  const [showNoCardsMessage, setShowNoCardsMessage] = useState(false);
+  const [hasShownNoCardsMessage, setHasShownNoCardsMessage] = useState(false);
+  const [hasPlayedCard, setHasPlayedCard] = useState(false);
 
   useEffect(() => {
     const images = [
       ...player.deck.map(card => card.imageUrl),
       ...opponent.deck.map(card => card.imageUrl),
-      '/assets/bg.png', // Add any other background images or assets
+      '/assets/bg.png',
     ];
 
     let loadedImages = 0;
@@ -35,6 +40,28 @@ export function GameBoard() {
       };
     });
   }, [player.deck, opponent.deck]);
+
+  useEffect(() => {
+    if (turn === 1 && !hasShownNoCardsMessage && !hasPlayedCard) {
+      const playableCards = player.deck.filter(card => card.isOnHand && card.mana <= player.mana);
+      if (playableCards.length === 0) {
+        setTimeout(() => {
+          setShowNoCardsMessage(true);
+          setHasShownNoCardsMessage(true);
+        }, 2000); 
+      }
+    }
+  }, [turn, player.deck, player.mana, hasShownNoCardsMessage, hasPlayedCard]);
+
+  const handleEndTurn = useCallback(() => {
+    setShowNoCardsMessage(false);
+  }, []);
+
+  const handlePlayCard = useCallback((cardId: string) => {
+    playCard(cardId);
+    setShowNoCardsMessage(false);
+    setHasPlayedCard(true);
+  }, [playCard]);
 
   if (isLoading) {
     return (
@@ -72,7 +99,7 @@ export function GameBoard() {
       </SectionSide>
 
       <div className='absolute left-0 w-full' style={{ top: 'calc(50vh - 1px)' }}>
-        <EndTurnButton />
+        <EndTurnButton isFirstTurn={turn === 1} noPlayableCards={showNoCardsMessage} onEndTurn={handleEndTurn} />
       </div>
 
       <SectionSide isPlayer>
@@ -90,13 +117,16 @@ export function GameBoard() {
                   card={card}
                   arrayLength={array.length}
                   index={index}
-                  onClick={() => playCard(card.id)}
+                  onClick={() => handlePlayCard(card.id)}
                   isDisabled={player.mana < card.mana}
                   isOpponent={false}
                 />
               ))}
           </div>
         </div>
+        <AnimatePresence>
+          {showNoCardsMessage && <NoCardsMessage />}
+        </AnimatePresence>
       </SectionSide>
     </div>
   );

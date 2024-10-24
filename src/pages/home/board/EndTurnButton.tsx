@@ -2,8 +2,15 @@ import { useGameStore } from "@/store/game/game.store";
 import styles from '@/components/ui/button/Button.module.scss';
 import cn from 'clsx';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
-export function EndTurnButton() {
+interface EndTurnButtonProps {
+    isFirstTurn: boolean;
+    noPlayableCards: boolean;
+    onEndTurn: () => void;
+}
+
+export function EndTurnButton({ isFirstTurn, noPlayableCards, onEndTurn }: EndTurnButtonProps) {
     const {endTurn, currentTurn, isGameOver, player, opponent} = useGameStore();
     const [isHovered, setIsHovered] = useState(false);
 
@@ -15,11 +22,29 @@ export function EndTurnButton() {
         if (isOpponentTurn) return "Opponent's Turn";
         if (isGameEnded) return "Game Over";
         if (player.health <= 0) return "You Lost";
-        return isHovered ? "End Turn" : "Your Turn";
+        return isHovered || (isFirstTurn && noPlayableCards) ? "End Turn" : "Your Turn";
+    };
+
+    const buttonVariants = {
+        highlight: {
+            boxShadow: ['0 0 0 rgba(255,255,255,0)', '0 0 20px rgba(255,255,255,0.8)', '0 0 0 rgba(255,255,255,0)'],
+            transition: {
+                duration: 1.5,
+                repeat: Infinity,
+                repeatType: 'reverse' as const,
+            },
+        },
+    };
+
+    const handleClick = () => {
+        if (!isDisabled) {
+            endTurn();
+            onEndTurn();
+        }
     };
 
     return (
-        <button 
+        <motion.button 
             className={cn(styles.button, styles.endTurn, {
                 [styles.disabled]: isDisabled
             })}
@@ -30,12 +55,14 @@ export function EndTurnButton() {
                 zIndex: 10
             }}
             disabled={isDisabled}
-            onClick={isDisabled ? ()=> null : endTurn}
+            onClick={handleClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            variants={buttonVariants}
+            animate={isFirstTurn && noPlayableCards ? 'highlight' : 'initial'}
         >
             <span>{getButtonText()}</span>
             <span>{getButtonText()}</span>
-        </button>
+        </motion.button>
     );
 }
