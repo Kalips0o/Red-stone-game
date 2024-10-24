@@ -5,7 +5,7 @@
   &.active {
     @apply text-brown-500;
     box-shadow: 0 2.5px 0 #b23909;
-    cursor: url('/assets/cursors/Cursor.cur'), pointer;
+    cursor: url('/public/assets/cursors/Cursor.cur'), pointer;
   }
 
 
@@ -87,5 +87,113 @@
 
   &.circle {
     @apply rounded-full py-3 px-3;
+  }
+
+  &.endTurn {
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+
+    position: relative;
+    border: none;
+    width: 240px;
+    height: 60px;
+    perspective: 230px;
+    background: radial-gradient(circle, rgba(211, 143, 34, 0.951), rgba(79, 45, 6, 0.926));
+    background-blend-mode: overlay;
+    border: 2px solid #e8ba6f;
+    border-radius: 15px;
+    cursor: pointer;
+    display: inline-block;
+    outline: none;
+    overflow: hidden;
+    box-shadow: 
+      0 4px 6px rgba(0, 0, 0, 0.47), 
+      inset 0 2px 5px rgba(255, 255, 255, 0.1);
+      
+
+
+    &:hover {
+      background: radial-gradient(circle, rgba(231, 52, 11, 0.93), rgba(12, 7, 0, 0.95));
+      border: 2px solid rgba(231, 51, 11, 0.882);
+      box-shadow: 
+        0 5px 7px rgba(0, 0, 0, 0.4),
+        inset 0 3px 6px rgba(255, 255, 255, 0.15);
+    }
+
+    span {
+      display: block;
+      position: absolute;
+      width: calc(100% - 10px);
+      height: calc(100% - 10px);
+      left: 5px;
+      top: 5px;
+      border-radius: 10px;
+      margin: 0;
+      text-align: center;
+      box-sizing: border-box;
+      transition: all 0.3s;
+      backface-visibility: hidden;
+
+      &:nth-child(1) {
+        background: linear-gradient(to bottom, #d0a85c, #b16e24);
+        box-shadow: 
+          inset 0 1px 0 rgba(255, 255, 255, 0.5),
+          0 2px 2px rgba(0, 0, 0, 0.3);
+        transform: rotateX(0deg);
+        transform-origin: 50% 50% -30px;
+        line-height: 50px;
+      }
+
+      &:nth-child(2) {
+        background: linear-gradient(to bottom, #e8ba6f, #c17d2d);
+        box-shadow: 
+          inset 0 1px 0 rgba(255, 255, 255, 0.5),
+          0 2px 2px rgba(0, 0, 0, 0.3);
+        transform: rotateX(-90deg);
+        transform-origin: 50% 50% -30px;
+        line-height: 50px;
+      }
+    }
+
+    &:hover {
+      span:nth-child(1) {
+        transform: rotateX(90deg);
+      }
+
+      span:nth-child(2) {
+        transform: rotateX(0deg);
+      }
+    }
+   
+    &.disabled {
+      cursor: not-allowed;
+      box-shadow: none;
+      background: radial-gradient(circle, rgba(125, 101, 62, 0.5), rgba(85, 65, 42, 0.45));
+      border-color: #a08550;
+
+      span {
+        background: linear-gradient(to bottom, #8e8e8e, #5a5a5a);
+        box-shadow: 
+          inset 0 1px 0 rgba(255,255,255,0.2),
+          0 2px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      &:hover {
+        background: radial-gradient(circle, rgba(233, 105, 46, 0.945), rgba(33, 15, 10, 0.923));
+        box-shadow: none;
+
+        span:nth-child(1) {
+          transform: rotateX(0deg);
+        }
+
+        span:nth-child(2) {
+          transform: rotateX(-90deg);
+        }
+      }
+    }
   }
 }
