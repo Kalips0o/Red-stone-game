@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion';
 import './NoCardsMessage.scss';
 
-export function NoCardsMessage() {
+interface NoCardsMessageProps {
+  text: string;
+}
+
+export function NoCardsMessage({ text }: NoCardsMessageProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -10,7 +14,7 @@ export function NoCardsMessage() {
       transition={{ duration: 0.5 }}
       className="dialog-cloud"
     >
-      No playable cards. End your turn.
+      {text}
     </motion.div>
   );
 }

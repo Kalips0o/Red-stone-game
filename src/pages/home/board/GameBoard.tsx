@@ -17,8 +17,9 @@ export function GameBoard() {
   const { player, opponent, playCard, turn } = useGameStore();
   const [isLoading, setIsLoading] = useState(true);
   const [showNoCardsMessage, setShowNoCardsMessage] = useState(false);
-  const [hasShownNoCardsMessage, setHasShownNoCardsMessage] = useState(false);
+  const [messageText, setMessageText] = useState("");
   const [hasPlayedCard, setHasPlayedCard] = useState(false);
+  const [hasShownMessage, setHasShownMessage] = useState(false);
 
   useEffect(() => {
     const images = [
@@ -42,24 +43,29 @@ export function GameBoard() {
   }, [player.deck, opponent.deck]);
 
   useEffect(() => {
-    if (turn === 1 && !hasShownNoCardsMessage && !hasPlayedCard) {
+    if (turn === 1 && !hasPlayedCard && !hasShownMessage) {
       const playableCards = player.deck.filter(card => card.isOnHand && card.mana <= player.mana);
-      if (playableCards.length === 0) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if (playableCards.length > 0) {
           setShowNoCardsMessage(true);
-          setHasShownNoCardsMessage(true);
-        }, 2000); 
-      }
+          setMessageText("You can play a card, or end your turn ");
+        } else {
+          setShowNoCardsMessage(true);
+          setMessageText("No playable cards. End your turn.");
+        }
+        setHasShownMessage(true);
+      }, 2000); 
     }
-  }, [turn, player.deck, player.mana, hasShownNoCardsMessage, hasPlayedCard]);
+  }, [turn, player.deck, player.mana, hasPlayedCard, hasShownMessage]);
 
   const handleEndTurn = useCallback(() => {
     setShowNoCardsMessage(false);
+    setHasPlayedCard(false);
   }, []);
 
   const handlePlayCard = useCallback((cardId: string) => {
     playCard(cardId);
-    setShowNoCardsMessage(false);
+    setMessageText("End your turn");
     setHasPlayedCard(true);
   }, [playCard]);
 
@@ -125,7 +131,7 @@ export function GameBoard() {
           </div>
         </div>
         <AnimatePresence>
-          {showNoCardsMessage && <NoCardsMessage />}
+          {showNoCardsMessage && <NoCardsMessage text={messageText} />}
         </AnimatePresence>
       </SectionSide>
     </div>
