@@ -17,23 +17,23 @@ export default defineConfig({
 				theme_color: '#123c64',
 				icons: [
 					{
-						src: '/favicons/192x192.png',
+						src: '/public/favicons/192x192.png',
 						sizes: '192x192',
 						type: 'image/png',
 					},
 					{
-						src: '/favicons/512x512.png',
+						src: '/public/favicons/512x512.png',
 						sizes: '512x512',
 						type: 'image/png',
 					},
 					{
-						src: '/favicons/192x192.jpg',
+						src: '/public/favicons/192x192.jpg',
 						sizes: '192x192',
 						type: 'image/jpg',
 						purpose: 'maskable',
 					},
 					{
-						src: '/favicons/512x512.jpg',
+						src: '/public/favicons/512x512.jpg',
 						sizes: '512x512',
 						type: 'image/jpg',
 						purpose: 'maskable',

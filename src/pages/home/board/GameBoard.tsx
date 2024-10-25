@@ -10,8 +10,8 @@ import { EndTurnButton } from "./EndTurnButton";
 import { SectionSide } from "./SectionSide";
 import { DragonAnimation } from "@/components/DragonAnimation";
 import { Loader } from "@/components/ui/loader/Loader";
-import { NoCardsMessage } from "./NoCardsMessage";
 import { AnimatePresence } from "framer-motion"; 
+import { EducationalNotice } from "@/components/ui/notification/EducationalNotice/EducationalNotice";
 
 export function GameBoard() {
   const { player, opponent, playCard, turn } = useGameStore();
@@ -131,7 +131,7 @@ export function GameBoard() {
           </div>
         </div>
         <AnimatePresence>
-          {showNoCardsMessage && <NoCardsMessage text={messageText} />}
+          {showNoCardsMessage && <EducationalNotice text={messageText} />}
         </AnimatePresence>
       </SectionSide>
     </div>

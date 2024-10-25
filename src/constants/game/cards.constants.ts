@@ -1,4 +1,4 @@
-import {EnumTypeCard, type ICard} from "../../card.types";
+import { EnumTypeCard, type ICard } from "../../card.types";
 
 export const CARDS: ICard[] = [
 	{
@@ -163,7 +163,7 @@ export const CARDS: ICard[] = [
 		name: 'SCSS',
 		mana: 5,
 		attack: 4,
-		health: 5,
+		health: 8, 
 		type: EnumTypeCard.taunt,
 		imageUrl: '/assets/cards/scss.png',
 	},
@@ -177,8 +177,8 @@ export const CARDS: ICard[] = [
 	{
 		name: 'Backbone.js',
 		mana: 6,
-		attack: 6,
-		health: 6,
+		attack: 7,
+		health: 5,
 		type: EnumTypeCard.taunt,
 		imageUrl: '/assets/cards/backbone.png',
 	},
@@ -216,8 +216,8 @@ export const CARDS: ICard[] = [
 	{
 		name: 'Preact',
 		mana: 2,
-		attack: 5,
-		health: 1,
+		attack: 4,
+		health: 2,
 		imageUrl: '/assets/cards/preact.png',
 	},
 	{
@@ -253,8 +253,8 @@ export const CARDS: ICard[] = [
 	{
 		name: 'Storybook',
 		mana: 2,
-		attack: 5,
-		health: 2,
+		attack: 4,
+		health: 3,
 		imageUrl: '/assets/cards/storybook.png',
 	},
 	{
@@ -282,9 +282,39 @@ export const CARDS: ICard[] = [
 	{
 		name: 'GraphQL',
 		mana: 2,
-		attack: 1,
+		attack: 2,
 		health: 3,
 		type: EnumTypeCard.taunt,
 		imageUrl: '/assets/cards/graphQL.png',
 	},
-]
+	{
+		name: 'Zustand',
+		mana: 2,
+		attack: 2,
+		health: 2,
+		imageUrl: '/assets/cards/zustand.png',
+	},
+	{
+		name: 'WordPress',
+		mana: 2,
+		attack: 2,
+		health: 2,  
+		imageUrl: '/assets/cards/wp.png',
+	},
+	{
+		name: 'MobX',
+		mana: 2,
+		attack: 1,
+		health: 4, 
+		type: EnumTypeCard.taunt,
+		imageUrl: '/assets/cards/mobX.png',
+	},
+	{
+		name: 'PHP',
+		mana: 2,
+		attack: 1,
+		health: 7, 
+		type: EnumTypeCard.taunt,
+		imageUrl: '/assets/cards/php.png',
+	},
+];

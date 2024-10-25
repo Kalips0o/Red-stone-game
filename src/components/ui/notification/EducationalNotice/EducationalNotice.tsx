@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import './NoCardsMessage.scss';
+import './EducationalNotice.scss';
 
-interface NoCardsMessageProps {
+interface EducationaNoticeProps {
   text: string;
 }
 
-export function NoCardsMessage({ text }: NoCardsMessageProps) {
+export function EducationalNotice({ text }:EducationaNoticeProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
