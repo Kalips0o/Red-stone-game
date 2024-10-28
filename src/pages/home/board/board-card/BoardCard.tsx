@@ -101,9 +101,9 @@ export function BoardCard({ card, isPlayerSide }: Props) {
         <motion.div
           className={cn("h-[11.3rem] w-32 rounded-lg border-2 border-transparent border-solid transition-colors relative no-drag", 
             {
-              'cursor-pointer border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.7)] bg-green-400/30': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player" && !isOpponentDefeated,
-              'border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)] bg-yellow-400/20': isSelectPlayerAttacker && !isOpponentDefeated,
-              'border-red-400 shadow-[0_0_15px_rgba(248,113,113,0.5)] bg-red-400/20': !isPlayerSide && cardAttackerId && !isOpponentDefeated,
+              'cursor-pointer border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.7)] bg-green-400/80': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player" && !isOpponentDefeated,
+              'border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)] bg-yellow-400/80': isSelectPlayerAttacker && !isOpponentDefeated,
+              'border-red-400 shadow-[0_0_15px_rgba(248,113,113,0.5)] bg-red-400/80': !isPlayerSide && cardAttackerId && !isOpponentDefeated,
               'cursor-not-allowed': currentTurn !== 'player' || isOpponentDefeated
             }
           )}
