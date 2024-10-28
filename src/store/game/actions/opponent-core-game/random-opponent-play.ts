@@ -7,6 +7,7 @@ import { playCardAction } from "../play-card";
 import { useSelectAttacker } from "../select-attacker";
 import { useAttackedCardStore } from '../attacked-card';
 import { useSoundStore } from "../hero-attack";
+import { useGameStore } from "../../game.store";
 
 // Вспомогательная функция для создания задержки
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -34,67 +35,65 @@ export const randomOpponentPlay = async (state: IGameStore) => {
                 };
                 mana = currentState.opponent.mana;
                 useSoundStore.getState().playCardOnTable();
-                await delay(1000); // Задержка после выкладывания карты
+                // Обновляем глобальное состояние
+                useGameStore.setState(currentState);
+                await delay(1000);
             }
         }
     }
 
-    await delay(500);
+    await delay(1500); // Увеличиваем паузу перед началом атак
 
-    // Затем выполняем атаки только картами, которые были на поле с прошлого хода
+    // Затем выполняем атаки
     const attackingCards = currentState.opponent.deck.filter(
         card => card.isOnBoard && !card.isPlayedThisTurn && card.isCanAttack
     );
     
     for (const card of attackingCards) {
-        // Подсвечиваем атакующую карту и ждем
+        // Подсвечиваем атакующую карту
         useSelectAttacker.getState().setCardAttackerId(card.id);
-        await delay(1000);
+        await delay(2000); // Увеличиваем время подсветки атакующей карты
 
         const taunt = currentState.player.deck.find(
             card => card.type === EnumTypeCard.taunt && card.isOnBoard
         );
 
+        let attackResult;
         if (taunt) {
-            const attackResult = attackCardAction(currentState, card.id, taunt.id);
-            currentState = {
-                ...currentState,
-                player: attackResult.player || currentState.player,
-                opponent: attackResult.opponent || currentState.opponent
-            };
+            attackResult = attackCardAction(currentState, card.id, taunt.id);
             useAttackedCardStore.getState().setAttackedCardId(taunt.id);
         } else if (!currentState.player.deck.filter(card => card.isOnBoard).length) {
-            const attackResult = attackHeroAction(currentState, card.id);
-            currentState = {
-                ...currentState,
-                player: attackResult.player || currentState.player,
-                opponent: attackResult.opponent || currentState.opponent
-            };
+            attackResult = attackHeroAction(currentState, card.id);
         } else {
             if (random(10) > 5 && currentState.player.deck.length > 0) {
                 const targetCard = currentState.player.deck.find(c => c.isOnBoard);
                 if (targetCard) {
-                    const attackResult = attackCardAction(currentState, card.id, targetCard.id);
-                    currentState = {
-                        ...currentState,
-                        player: attackResult.player || currentState.player,
-                        opponent: attackResult.opponent || currentState.opponent
-                    };
+                    attackResult = attackCardAction(currentState, card.id, targetCard.id);
                     useAttackedCardStore.getState().setAttackedCardId(targetCard.id);
                 }
             } else {
-                const attackResult = attackHeroAction(currentState, card.id);
-                currentState = {
-                    ...currentState,
-                    player: attackResult.player || currentState.player,
-                    opponent: attackResult.opponent || currentState.opponent
-                };
+                attackResult = attackHeroAction(currentState, card.id);
             }
         }
 
-        // Сбрасываем подсветку после атаки
+        if (attackResult) {
+            currentState = {
+                ...currentState,
+                player: attackResult.player || currentState.player,
+                opponent: attackResult.opponent || currentState.opponent
+            };
+            // Обновляем глобальное состояние
+            useGameStore.setState(currentState);
+        }
+
+        // Ждем завершения анимации атаки и уничтожения
+        await delay(4000); // Увеличиваем время ожидания после атаки
+        
         useSelectAttacker.getState().setCardAttackerId(null);
-        await delay(800); // Ждем, чтобы увидеть результат атаки
+        useAttackedCardStore.getState().setAttackedCardId(null);
+        
+        // Дополнительная пауза перед следующей атакой
+        await delay(1500);
     }
 
     return {

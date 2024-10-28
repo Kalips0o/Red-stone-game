@@ -12,7 +12,9 @@ interface IRemoveCardStore {
 
 export const useRemoveCardStore = create<IRemoveCardStore>((set) => ({
   cardsToRemove: [],
-  addCardToRemove: (cardId) => set((state) => ({ cardsToRemove: [...state.cardsToRemove, cardId] })),
+  addCardToRemove: (cardId) => set((state) => ({ 
+    cardsToRemove: [...state.cardsToRemove, cardId] 
+  })),
   clearCardsToRemove: () => set({ cardsToRemove: [] }),
 }));
 
@@ -44,31 +46,31 @@ export const attackCardAction = (
 
     target.health -= damageToTarget;
     attacker.health -= damageToAttacker;
-
     attacker.isCanAttack = false;
 
     useDamageStore.getState().addDamage(targetId, damageToTarget);
     useDamageStore.getState().addDamage(attackerId, damageToAttacker);
-
     useSoundStore.getState().playCardAttack();
 
+    const newState = { ...state };
     const newAttackerDeck = [...attackerDeck];
     const newTargetDeck = [...targetDeck];
 
-    // Немедленно удаляем карты с нулевым или отрицательным здоровьем
+    // Сразу удаляем карты с 0 HP
     if (target.health <= 0) {
+      useRemoveCardStore.getState().addCardToRemove(target.id);
       newTargetDeck.splice(targetIndex, 1);
     } else {
       newTargetDeck[targetIndex] = target;
     }
 
     if (attacker.health <= 0) {
+      useRemoveCardStore.getState().addCardToRemove(attacker.id);
       newAttackerDeck.splice(attackerIndex, 1);
     } else {
       newAttackerDeck[attackerIndex] = attacker;
     }
 
-    const newState = { ...state };
     if (isAttackerPlayer) {
       newState.player = { ...newState.player, deck: newAttackerDeck };
       newState.opponent = { ...newState.opponent, deck: newTargetDeck };

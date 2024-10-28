@@ -3,6 +3,7 @@ import type { ICard } from '@/card.types';
 import type { IGameCard } from '@/store/game/game.types';
 import './Cards.scss';
 import { motion } from 'framer-motion';
+import cn from 'clsx';
 
 type CardStatsProps = Pick<ICard | IGameCard, 'imageUrl'> & {
   mana?: number;
@@ -11,6 +12,7 @@ type CardStatsProps = Pick<ICard | IGameCard, 'imageUrl'> & {
   isInHand?: boolean;
   isHovered?: boolean;
   isOnBoard?: boolean;
+  isDying?: boolean;
 };
 
 const cardContainerVariants = {
@@ -48,11 +50,15 @@ export const Card: React.FC<CardStatsProps> = ({
   imageUrl, 
   isInHand = false, 
   isHovered = false,
-  isOnBoard = false
+  isOnBoard = false,
+  isDying = false
 }) => {
   return (
     <motion.div 
-      className='relative w-full h-full overflow-hidden rounded-lg'
+      className={cn(
+        'relative w-full h-full overflow-hidden rounded-lg',
+        { 'dying-card': isDying }
+      )}
       variants={cardContainerVariants}
       initial="initial"
       animate="animate"

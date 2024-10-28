@@ -20,13 +20,23 @@ interface Props {
 const destroyAnimation = {
   initial: { opacity: 1, scale: 1, filter: "brightness(1)" },
   animate: { 
-    opacity: [1, 0.8, 0.6, 0.4, 0.2, 0],
-    scale: [1, 1.1, 1.2, 1.1, 1, 0.9],
-    filter: ["brightness(1)", "brightness(1.5)", "brightness(2)", "brightness(1.5)", "brightness(1)", "brightness(0.5)"],
+    opacity: [1, 1, 1, 1, 0.8, 0.6, 0.4, 0.2, 0],
+    scale: [1, 1.2, 1, 1.1, 1.2, 1.1, 1, 1, 0.9],
+    filter: [
+      "brightness(1)", 
+      "brightness(2)", 
+      "brightness(1)", 
+      "brightness(1.5)", 
+      "brightness(2)", 
+      "brightness(1.5)", 
+      "brightness(1)", 
+      "brightness(1)", 
+      "brightness(0.5)"
+    ],
   },
   transition: { 
-    duration: 1.5,
-    times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+    duration: 4, // Увеличиваем длительность анимации
+    times: [0, 0.1, 0.2, 0.3, 0.5, 0.6, 0.7, 0.8, 1],
     ease: "easeInOut"
   }
 };
@@ -42,12 +52,34 @@ export function BoardCard({ card, isPlayerSide }: Props) {
   const { playCardAttack } = useSoundStore();
   const attackedCardId = useAttackedCardStore((state) => state.attackedCardId);
   const isAttacked = attackedCardId === card.id;
+  const [isShaking, setIsShaking] = useState(false);
+  const [lastHealth, setLastHealth] = useState(card.health);
 
   useEffect(() => {
     if (cardsToRemove.includes(card.id)) {
       setIsDestroying(true);
     }
   }, [cardsToRemove, card.id]);
+
+  useEffect(() => {
+    // Проверяем изменение здоровья
+    if (card.health !== lastHealth) {
+      setLastHealth(card.health);
+      if (card.health <= 0) {
+        setIsShaking(true);
+        setTimeout(() => {
+          setIsShaking(false);
+          setIsDestroying(true);
+        }, 2500); // Увеличиваем время тряски до 2.5 секунд
+      } else {
+        // Добавляем тряску при любом уроне
+        setIsShaking(true);
+        setTimeout(() => {
+          setIsShaking(false);
+        }, 1000);
+      }
+    }
+  }, [card.health, lastHealth]);
 
   const handleClick = (cardId: string) => {
     if (isPlayerSide) {
@@ -111,6 +143,8 @@ export function BoardCard({ card, isPlayerSide }: Props) {
         <motion.div
           className={cn("h-[11.3rem] w-32 rounded-lg border-2 border-transparent border-solid transition-colors relative no-drag", 
             {
+              'shake-animation': isShaking,
+              'border-red-600 shadow-[0_0_20px_rgba(220,38,38,0.8)]': card.health <= 0,
               'cursor-pointer border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.7)] bg-green-400/80': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player" && !isOpponentDefeated,
               'border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)] bg-yellow-400/80': isSelectPlayerAttacker && currentTurn === "player" && !isOpponentDefeated,
               'border-red-400 shadow-[0_0_15px_rgba(248,113,113,0.5)] bg-red-400/80': (
@@ -138,7 +172,14 @@ export function BoardCard({ card, isPlayerSide }: Props) {
             msUserSelect: 'none',
           }}
         >
-          <Card mana={card.mana} attack={card.attack} health={card.health} imageUrl={card.imageUrl} isHovered={isHovered && canEnlarge} />
+          <Card 
+            mana={card.mana} 
+            attack={card.attack} 
+            health={card.health} 
+            imageUrl={card.imageUrl} 
+            isHovered={isHovered && canEnlarge}
+            isDying={card.health <= 0}
+          />
           <DamageList id={card.id} isRight /> 
         </motion.div>
       )}
@@ -147,12 +188,18 @@ export function BoardCard({ card, isPlayerSide }: Props) {
           className="h-[11.3rem] w-32 rounded-lg relative"
           initial={destroyAnimation.initial}
           animate={destroyAnimation.animate}
-          transition={destroyAnimation.transition}
+          transition={{ ...destroyAnimation.transition, delay: 0.5 }} // Увеличиваем задержку
           onAnimationComplete={() => {
             setIsDestroying(false);
           }}
         >
-          <Card mana={card.mana} attack={card.attack} health={card.health} imageUrl={card.imageUrl} />
+          <Card 
+            mana={card.mana} 
+            attack={card.attack} 
+            health={0} 
+            imageUrl={card.imageUrl}
+            isDying={true}
+          />
         </motion.div>
       )}
     </AnimatePresence>

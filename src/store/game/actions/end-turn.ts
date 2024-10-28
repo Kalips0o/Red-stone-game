@@ -2,6 +2,7 @@ import { MAX_MANA } from "@/constants/game/core.constants";
 import type { IGameCard, IGameStore, TPlayer } from "../game.types";
 import { drawCardsAction } from "./draw-cards";
 import { useNotificationStore } from "@/store/notiffication/notification.store";
+import { useSoundStore } from "./hero-attack";
 
 const getNewMana = (currentTurn: number) => {
   return Math.min(currentTurn, MAX_MANA);
@@ -16,13 +17,25 @@ const updateCardOnTheEndTurn = (deck: IGameCard[]) =>
 
 export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
   if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
-    return state;
+    const winner = state.player.health > 0 ? 'player' : 'opponent';
+    const message = winner === 'player' ? 'You win!' : 'You lose!';
+    
+    useNotificationStore.getState().show(message, winner === 'player' ? 'win' : 'lose');
+    if (winner === 'player') {
+      useSoundStore.getState().playWin();
+    } else {
+      useSoundStore.getState().playLose();
+    }
+
+    return {
+      ...state,
+      isGameOver: true,
+      isGameStarted: false
+    };
   }
 
   const newTurn: TPlayer = state.currentTurn === "player" ? "opponent" : "player";
-
   const isNewTurnPlayer = newTurn === "player";
-
   const newTurnNumber = isNewTurnPlayer ? state.turn + 1 : state.turn;
 
   let newPlayerMana = state.player.mana;
@@ -50,25 +63,6 @@ export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
     turn: newTurnNumber
   };
 
-  const playerHasCards = updatedState.player.deck.length > 0;
-  const opponentHasCards = updatedState.opponent.deck.length > 0;
-
-  if (!playerHasCards || !opponentHasCards) {
-    updatedState.isGameOver = true;
-    updatedState.isGameStarted = false;
-
-    const winner = playerHasCards ? 'player' : 'opponent';
-    const message = winner === 'player' ? 'You win!' : 'You lose!';
-    
-    useNotificationStore.getState().show(message, winner === 'player' ? 'win' : 'lose');
-
-    return updatedState;
-  }
-
-  if (!isNewTurnPlayer && state.player.health <= 0) {
-    return state;
-  }
-
   if (!isNewTurnPlayer) {
     updatedState.opponent = {
       ...updatedState.opponent,
@@ -81,15 +75,7 @@ export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
     };
   }
 
-  if (updatedState.player.health <= 0 || updatedState.opponent.health <= 0) {
-    updatedState.isGameOver = true;
-    updatedState.isGameStarted = false;
-
-    const winner = updatedState.player.health > 0 ? 'player' : 'opponent';
-    const message = winner === 'player' ? 'You win!' : 'You lose!';
-    
-    useNotificationStore.getState().show(message, winner === 'player' ? 'win' : 'lose');
-  } else if (isNewTurnPlayer && !updatedState.isGameOver) {
+  if (isNewTurnPlayer && !updatedState.isGameOver) {
     useNotificationStore.getState().show('Your turn');
   }
 
