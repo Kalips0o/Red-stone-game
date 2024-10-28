@@ -32,7 +32,7 @@ export function PlayerInfo({ player, typePlayer }: Props) {
   const isStunned = player.health <= 0;
 
   const handleClick = () => {
-    if (!isPlayer && cardAttackerId && !opponentTaunt && !isStunned) {
+    if (!isPlayer && cardAttackerId && !opponentTaunt && !isStunned && currentTurn === 'player') {
       handleSelectTarget(typePlayer, true);
       if (!isPlayer) {
         setIsShaking(true);
@@ -64,7 +64,7 @@ export function PlayerInfo({ player, typePlayer }: Props) {
         {
           'player-info--left': isPlayer,
           'player-info--right ': !isPlayer,
-          '!border-red-500 !cursor-pointer shadow-[0_0_15px_5px_rgba(255,0,0,0.7)]': !isPlayer && cardAttackerId && !opponentTaunt && !isStunned,
+          '!border-red-500 !cursor-pointer shadow-[0_0_15px_5px_rgba(255,0,0,0.7)]': !isPlayer && cardAttackerId && !opponentTaunt && !isStunned && currentTurn === 'player',
         }
       )}
       disabled={isPlayer || currentTurn === 'opponent' || isStunned}
@@ -73,7 +73,7 @@ export function PlayerInfo({ player, typePlayer }: Props) {
       <div className="relative player-image-container">
         <img
           className={cn(
-            " player-image", 
+            "player-image", 
             { 
               'player-image--player': isPlayer,
               'player-image--opponent rounded-full': !isPlayer,

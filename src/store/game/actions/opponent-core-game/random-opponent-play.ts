@@ -3,59 +3,110 @@ import type { IGameStore } from "../../game.types";
 import { attackCardAction } from "../attack-card";
 import { attackHeroAction } from "../hero-attack";
 import random from "lodash/random";
-import { MAX_MANA } from "@/constants/game/core.constants";
-import { playRandomCard } from "./play-random-card";
+import { playCardAction } from "../play-card";
+import { useSelectAttacker } from "../select-attacker";
+import { useAttackedCardStore } from '../attacked-card';
+import { useSoundStore } from "../hero-attack";
+
+// Вспомогательная функция для создания задержки
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Функция для выполнения случайного хода противника
-export const randomOpponentPlay = (state: IGameStore) => {
-    const opponent = state.opponent; // Получаем состояние противника
+export const randomOpponentPlay = async (state: IGameStore) => {
+    let currentState: IGameStore = { ...state };
 
-    // Проходим по всем картам на поле противника
-    opponent.deck
-        .filter(card => card.isOnBoard) // Фильтруем карты, находящиеся на поле
-        .forEach(card => {
-            // Ищем карты типа "таунт" у игрока
-            const taunt = state.player.deck.find(
-                card => card.type === EnumTypeCard.taunt && card.isOnBoard
-            );
+    // Сначала выложим карты
+    let mana = currentState.opponent.mana;
+    const playableCards = currentState.opponent.deck.filter(
+        card => !card.isOnBoard && card.isOnHand && card.mana <= mana
+    ).sort((a, b) => b.mana - a.mana); // Сортируем по мане
 
-            // Если есть карта "таунт", атакуем ее
-            if (taunt) {
-                state = { ...state, ...attackCardAction(state, card.id, taunt.id) };
-                return; // Выходим из текущей итерации
+    // Выкладываем карты по одной
+    for (const card of playableCards) {
+        if (mana >= card.mana) {
+            const playResult = playCardAction(currentState, card.id);
+            
+            if (playResult.opponent) {
+                currentState = {
+                    ...currentState,
+                    player: playResult.player || currentState.player,
+                    opponent: playResult.opponent
+                };
+                mana = currentState.opponent.mana;
+                useSoundStore.getState().playCardOnTable();
+                await delay(1000); // Задержка после выкладывания карты
             }
+        }
+    }
 
-            // Если у игрока нет карт на поле, атакуем героя игрока
-            if (!state.player.deck.filter(card => card.isOnBoard).length) {
-                state = { ...state, ...attackHeroAction(state, card.id) };
-                return; // Выходим из текущей итерации
-            }
+    await delay(500);
 
-            // Случайное решение: атаковать карту игрока или героя
-            if (random(10) > 5 && state.player.deck) {
-                const targetId = state.player.deck[random(state.player.deck.length)].id; // Случайная карта игрока для атаки
-                state = { ...state, ...attackCardAction(state, card.id, targetId) };
+    // Затем выполняем атаки только картами, которые были на поле с прошлого хода
+    const attackingCards = currentState.opponent.deck.filter(
+        card => card.isOnBoard && !card.isPlayedThisTurn && card.isCanAttack
+    );
+    
+    for (const card of attackingCards) {
+        // Подсвечиваем атакующую карту и ждем
+        useSelectAttacker.getState().setCardAttackerId(card.id);
+        await delay(1000);
+
+        const taunt = currentState.player.deck.find(
+            card => card.type === EnumTypeCard.taunt && card.isOnBoard
+        );
+
+        if (taunt) {
+            const attackResult = attackCardAction(currentState, card.id, taunt.id);
+            currentState = {
+                ...currentState,
+                player: attackResult.player || currentState.player,
+                opponent: attackResult.opponent || currentState.opponent
+            };
+            useAttackedCardStore.getState().setAttackedCardId(taunt.id);
+        } else if (!currentState.player.deck.filter(card => card.isOnBoard).length) {
+            const attackResult = attackHeroAction(currentState, card.id);
+            currentState = {
+                ...currentState,
+                player: attackResult.player || currentState.player,
+                opponent: attackResult.opponent || currentState.opponent
+            };
+        } else {
+            if (random(10) > 5 && currentState.player.deck.length > 0) {
+                const targetCard = currentState.player.deck.find(c => c.isOnBoard);
+                if (targetCard) {
+                    const attackResult = attackCardAction(currentState, card.id, targetCard.id);
+                    currentState = {
+                        ...currentState,
+                        player: attackResult.player || currentState.player,
+                        opponent: attackResult.opponent || currentState.opponent
+                    };
+                    useAttackedCardStore.getState().setAttackedCardId(targetCard.id);
+                }
             } else {
-                state = { ...state, ...attackHeroAction(state, card.id) }; // Атакуем героя
+                const attackResult = attackHeroAction(currentState, card.id);
+                currentState = {
+                    ...currentState,
+                    player: attackResult.player || currentState.player,
+                    opponent: attackResult.opponent || currentState.opponent
+                };
             }
-        });
+        }
 
-    let mana = opponent.mana; // Получаем количество маны противника
-    let iterations = 0; // Счетчик итераций
-
-    // Выполняем случайные ходы, пока есть мана и не превышено максимальное количество итераций
-    while (mana > 0 && iterations <= MAX_MANA) {
-        const newState = playRandomCard(state, mana); // Выполняем случайный ход
-        mana = newState.opponent.mana; // Обновляем количество маны
-        state = { ...state, ...newState }; // Обновляем состояние игры
-        iterations++; // Увеличиваем счетчик итераций
+        // Сбрасываем подсветку после атаки
+        useSelectAttacker.getState().setCardAttackerId(null);
+        await delay(800); // Ждем, чтобы увидеть результат атаки
     }
 
     return {
-        ...state,
+        ...currentState,
         opponent: {
-            ...state.opponent,
-            mana: 0 // Устанавливаем ману противника в 0 после хода
+            ...currentState.opponent,
+            mana: 0
         },
+        currentTurn: currentState.currentTurn,
+        isGameOver: currentState.isGameOver,
+        isGameStarted: currentState.isGameStarted,
+        turn: currentState.turn,
+        isPlayerTurnNotified: currentState.isPlayerTurnNotified
     };
 };

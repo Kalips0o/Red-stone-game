@@ -22,22 +22,26 @@ const useGameStore = create<IGameStore>((set) => ({
                 return { ...state, isGameOver: true };
             }
             
-            const updatedState = endTurnAction(state);
+            const updatedState = { ...state, ...endTurnAction(state) };
             
             if (!updatedState.isGameOver) {
-                setTimeout(() => {
-                    set(state => {
-                        const updatedState = randomOpponentPlay(state);
-                        
-                        if (!updatedState.isGameOver) {
+                setTimeout(async () => {
+                    set(state => ({
+                        ...state,
+                        isPlayerTurnNotified: false
+                    }));
+
+                    const finalState = await randomOpponentPlay(updatedState as IGameStore);
+                    
+                    set(() => {
+                        if (!finalState.isGameOver) {
                             setTimeout(() => {
-                                set(() => endTurnAction(updatedState));
-                            }, 2500);
+                                set(state => ({ ...state, ...endTurnAction(finalState) }));
+                            }, 1500);
                         }
-                        
-                        return updatedState;
+                        return finalState;
                     });
-                }, 3000);
+                }, 1500);
             }
             
             return updatedState;
@@ -49,7 +53,7 @@ const useGameStore = create<IGameStore>((set) => ({
             if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
                 return state;
             }
-            return playCardAction(state, cardId);
+            return { ...state, ...playCardAction(state, cardId) };
         });
     },
 
@@ -58,7 +62,7 @@ const useGameStore = create<IGameStore>((set) => ({
             if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
                 return state;
             }
-            return returnCardAction(state, cardId);
+            return { ...state, ...returnCardAction(state, cardId) };
         });
     },
 
@@ -67,7 +71,7 @@ const useGameStore = create<IGameStore>((set) => ({
             if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
                 return state;
             }
-            const newState = attackCardAction(state, attackerId, targetId);
+            const newState = { ...state, ...attackCardAction(state, attackerId, targetId) };
             if (newState.player?.health <= 0 || newState.opponent?.health <= 0) {
                 newState.isGameOver = true;
             }
@@ -80,11 +84,9 @@ const useGameStore = create<IGameStore>((set) => ({
             if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
                 return state;
             }
-            const newState = attackHeroAction(state, attackerId);
-            if (newState.player && newState.opponent) {
-                if (newState.player.health <= 0 || newState.opponent.health <= 0) {
-                    newState.isGameOver = true;
-                }
+            const newState = { ...state, ...attackHeroAction(state, attackerId) };
+            if (newState.player?.health <= 0 || newState.opponent?.health <= 0) {
+                newState.isGameOver = true;
             }
             return newState;
         });

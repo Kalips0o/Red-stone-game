@@ -55,15 +55,14 @@ export const attackCardAction = (
     const newAttackerDeck = [...attackerDeck];
     const newTargetDeck = [...targetDeck];
 
+    // Немедленно удаляем карты с нулевым или отрицательным здоровьем
     if (target.health <= 0) {
-      useRemoveCardStore.getState().addCardToRemove(targetId);
       newTargetDeck.splice(targetIndex, 1);
     } else {
       newTargetDeck[targetIndex] = target;
     }
 
     if (attacker.health <= 0) {
-      useRemoveCardStore.getState().addCardToRemove(attackerId);
       newAttackerDeck.splice(attackerIndex, 1);
     } else {
       newAttackerDeck[attackerIndex] = attacker;

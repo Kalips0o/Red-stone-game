@@ -10,6 +10,7 @@ import { Card } from "@/components/cards/Card";
 import { useRemoveCardStore } from "@/store/game/actions/attack-card";
 import { useNotificationStore } from "@/store/notiffication/notification.store";
 import { useSoundStore } from "@/store/game/actions/hero-attack";
+import { useAttackedCardStore } from '@/store/game/actions/attacked-card';
 
 interface Props {
   card: IGameCard; 
@@ -39,6 +40,8 @@ export function BoardCard({ card, isPlayerSide }: Props) {
   const cardsToRemove = useRemoveCardStore((state) => state.cardsToRemove);
   const { message } = useNotificationStore();
   const { playCardAttack } = useSoundStore();
+  const attackedCardId = useAttackedCardStore((state) => state.attackedCardId);
+  const isAttacked = attackedCardId === card.id;
 
   useEffect(() => {
     if (cardsToRemove.includes(card.id)) {
@@ -88,6 +91,13 @@ export function BoardCard({ card, isPlayerSide }: Props) {
       scale: 1.5,
       zIndex: 50,
       transition: { duration: 0.2 }
+    },
+    attacked: {
+      x: [-5, 5, -5, 5, -5, 5, 0],
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut"
+      }
     }
   };
 
@@ -102,14 +112,20 @@ export function BoardCard({ card, isPlayerSide }: Props) {
           className={cn("h-[11.3rem] w-32 rounded-lg border-2 border-transparent border-solid transition-colors relative no-drag", 
             {
               'cursor-pointer border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.7)] bg-green-400/80': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player" && !isOpponentDefeated,
-              'border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)] bg-yellow-400/80': isSelectPlayerAttacker && !isOpponentDefeated,
-              'border-red-400 shadow-[0_0_15px_rgba(248,113,113,0.5)] bg-red-400/80': !isPlayerSide && cardAttackerId && !isOpponentDefeated,
+              'border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)] bg-yellow-400/80': isSelectPlayerAttacker && currentTurn === "player" && !isOpponentDefeated,
+              'border-red-400 shadow-[0_0_15px_rgba(248,113,113,0.5)] bg-red-400/80': (
+                (!isPlayerSide && cardAttackerId && currentTurn === "player") || // Когда игрок атакует карту оппонента
+                (!isPlayerSide && card.id === cardAttackerId && currentTurn === "opponent") // Когда оппонент атакует этой картой
+              ) && !isOpponentDefeated,
               'cursor-not-allowed': currentTurn !== 'player' || isOpponentDefeated
             }
           )}
           variants={cardVariants}
           initial="initial"
-          animate="animate"
+          animate={[
+            "animate", 
+            isAttacked ? "attacked" : ""
+          ]}
           whileHover={canEnlarge && !isOpponentDefeated ? "hover" : "animate"}
           onClick={() => (currentTurn !== 'player' || isOpponentDefeated ? null : handleClick(card.id))}
           onMouseEnter={() => setIsHovered(true)}
