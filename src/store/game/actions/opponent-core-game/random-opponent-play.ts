@@ -20,7 +20,7 @@ export const randomOpponentPlay = async (state: IGameStore) => {
     let mana = currentState.opponent.mana;
     const playableCards = currentState.opponent.deck.filter(
         card => !card.isOnBoard && card.isOnHand && card.mana <= mana
-    ).sort((a, b) => b.mana - a.mana); // Сортируем по мане
+    ).sort((a, b) => b.mana - a.mana); 
 
     // Выкладываем карты по одной
     for (const card of playableCards) {
@@ -35,14 +35,13 @@ export const randomOpponentPlay = async (state: IGameStore) => {
                 };
                 mana = currentState.opponent.mana;
                 useSoundStore.getState().playCardOnTable();
-                // Обновляем глобальное состояние
                 useGameStore.setState(currentState);
-                await delay(1000);
+                await delay(750); 
             }
         }
     }
 
-    await delay(1500); // Увеличиваем паузу перед началом атак
+    await delay(1100); 
 
     // Затем выполняем атаки
     const attackingCards = currentState.opponent.deck.filter(
@@ -52,7 +51,7 @@ export const randomOpponentPlay = async (state: IGameStore) => {
     for (const card of attackingCards) {
         // Подсвечиваем атакующую карту
         useSelectAttacker.getState().setCardAttackerId(card.id);
-        await delay(2000); // Увеличиваем время подсветки атакующей карты
+        await delay(1500); 
 
         const taunt = currentState.player.deck.find(
             card => card.type === EnumTypeCard.taunt && card.isOnBoard
@@ -82,18 +81,21 @@ export const randomOpponentPlay = async (state: IGameStore) => {
                 player: attackResult.player || currentState.player,
                 opponent: attackResult.opponent || currentState.opponent
             };
-            // Обновляем глобальное состояние
             useGameStore.setState(currentState);
+
+            if (currentState.player.health <= 0) {
+                currentState.isGameOver = true;
+                break; 
+            }
         }
 
-        // Ждем завершения анимации атаки и уничтожения
-        await delay(4000); // Увеличиваем время ожидания после атаки
+     
+        await delay(3000); 
         
         useSelectAttacker.getState().setCardAttackerId(null);
         useAttackedCardStore.getState().setAttackedCardId(null);
         
-        // Дополнительная пауза перед следующей атакой
-        await delay(1500);
+        await delay(1000);
     }
 
     return {

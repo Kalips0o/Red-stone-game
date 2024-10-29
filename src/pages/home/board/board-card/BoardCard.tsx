@@ -17,29 +17,6 @@ interface Props {
   isPlayerSide: boolean; 
 }
 
-const destroyAnimation = {
-  initial: { opacity: 1, scale: 1, filter: "brightness(1)" },
-  animate: { 
-    opacity: [1, 1, 1, 1, 0.8, 0.6, 0.4, 0.2, 0],
-    scale: [1, 1.2, 1, 1.1, 1.2, 1.1, 1, 1, 0.9],
-    filter: [
-      "brightness(1)", 
-      "brightness(2)", 
-      "brightness(1)", 
-      "brightness(1.5)", 
-      "brightness(2)", 
-      "brightness(1.5)", 
-      "brightness(1)", 
-      "brightness(1)", 
-      "brightness(0.5)"
-    ],
-  },
-  transition: { 
-    duration: 4, // Увеличиваем длительность анимации
-    times: [0, 0.1, 0.2, 0.3, 0.5, 0.6, 0.7, 0.8, 1],
-    ease: "easeInOut"
-  }
-};
 
 export function BoardCard({ card, isPlayerSide }: Props) {
   const { handleSelectTarget } = useEnemyTarget();
@@ -62,7 +39,7 @@ export function BoardCard({ card, isPlayerSide }: Props) {
   }, [cardsToRemove, card.id]);
 
   useEffect(() => {
-    // Проверяем изменение здоровья
+  
     if (card.health !== lastHealth) {
       setLastHealth(card.health);
       if (card.health <= 0) {
@@ -70,9 +47,9 @@ export function BoardCard({ card, isPlayerSide }: Props) {
         setTimeout(() => {
           setIsShaking(false);
           setIsDestroying(true);
-        }, 2500); // Увеличиваем время тряски до 2.5 секунд
+        }, 2500); 
       } else {
-        // Добавляем тряску при любом уроне
+      
         setIsShaking(true);
         setTimeout(() => {
           setIsShaking(false);
@@ -121,7 +98,7 @@ export function BoardCard({ card, isPlayerSide }: Props) {
     },
     hover: {
       scale: 1.5,
-      zIndex: 50,
+      zIndex: 20,
       transition: { duration: 0.2 }
     },
     attacked: {
@@ -148,8 +125,8 @@ export function BoardCard({ card, isPlayerSide }: Props) {
               'cursor-pointer border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.7)] bg-green-400/80': card.isCanAttack && !isSelectPlayerAttacker && isPlayerSide && currentTurn === "player" && !isOpponentDefeated,
               'border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)] bg-yellow-400/80': isSelectPlayerAttacker && currentTurn === "player" && !isOpponentDefeated,
               'border-red-400 shadow-[0_0_15px_rgba(248,113,113,0.5)] bg-red-400/80': (
-                (!isPlayerSide && cardAttackerId && currentTurn === "player") || // Когда игрок атакует карту оппонента
-                (!isPlayerSide && card.id === cardAttackerId && currentTurn === "opponent") // Когда оппонент атакует этой картой
+                (!isPlayerSide && cardAttackerId && currentTurn === "player") || 
+                (!isPlayerSide && card.id === cardAttackerId && currentTurn === "opponent") 
               ) && !isOpponentDefeated,
               'cursor-not-allowed': currentTurn !== 'player' || isOpponentDefeated
             }
@@ -164,14 +141,7 @@ export function BoardCard({ card, isPlayerSide }: Props) {
           onClick={() => (currentTurn !== 'player' || isOpponentDefeated ? null : handleClick(card.id))}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          style={{ 
-            zIndex: isHovered && canEnlarge && !isOpponentDefeated ? 10 : 'auto',
-            userSelect: 'none',
-            WebkitUserSelect: 'none',
-            MozUserSelect: 'none',
-            msUserSelect: 'none',
-          }}
-        >
+        > 
           <Card 
             mana={card.mana} 
             attack={card.attack} 
@@ -180,28 +150,10 @@ export function BoardCard({ card, isPlayerSide }: Props) {
             isHovered={isHovered && canEnlarge}
             isDying={card.health <= 0}
           />
-          <DamageList id={card.id} isRight /> 
+         <DamageList id={card.id} isRight /> 
         </motion.div>
       )}
-      {isDestroying && (
-        <motion.div
-          className="h-[11.3rem] w-32 rounded-lg relative"
-          initial={destroyAnimation.initial}
-          animate={destroyAnimation.animate}
-          transition={{ ...destroyAnimation.transition, delay: 0.5 }} // Увеличиваем задержку
-          onAnimationComplete={() => {
-            setIsDestroying(false);
-          }}
-        >
-          <Card 
-            mana={card.mana} 
-            attack={card.attack} 
-            health={0} 
-            imageUrl={card.imageUrl}
-            isDying={true}
-          />
-        </motion.div>
-      )}
+      
     </AnimatePresence>
   );
 }

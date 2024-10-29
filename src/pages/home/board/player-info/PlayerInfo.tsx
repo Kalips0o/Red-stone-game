@@ -23,6 +23,7 @@ export function PlayerInfo({ player, typePlayer }: Props) {
   const { handleSelectTarget } = useEnemyTarget();
   const { currentTurn, opponent } = useGameStore();
   const [isShaking, setIsShaking] = useState(false);
+  const [lastHealth, setLastHealth] = useState(player.health);
 
   const opponentTaunt = opponent.deck.find(
     (card) => card.type === EnumTypeCard.taunt && card.isOnBoard
@@ -31,23 +32,22 @@ export function PlayerInfo({ player, typePlayer }: Props) {
   const isPlayer = typePlayer === 'player';
   const isStunned = player.health <= 0;
 
+  // Добавляем эффект для отслеживания изменения здоровья
+  useEffect(() => {
+    if (player.health !== lastHealth) {
+      setLastHealth(player.health);
+      setIsShaking(true);
+      setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
+    }
+  }, [player.health, lastHealth]);
+
   const handleClick = () => {
     if (!isPlayer && cardAttackerId && !opponentTaunt && !isStunned && currentTurn === 'player') {
       handleSelectTarget(typePlayer, true);
-      if (!isPlayer) {
-        setIsShaking(true);
-      }
     }
   };
-
-  useEffect(() => {
-    if (isShaking) {
-      const timer = setTimeout(() => {
-        setIsShaking(false);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [isShaking]);
 
   const getHeroImage = () => {
     if (isPlayer) {
@@ -63,7 +63,7 @@ export function PlayerInfo({ player, typePlayer }: Props) {
         'absolute z-[1] border-4 border-transparent transition-colors rounded-full cursor-default player-info',
         {
           'player-info--left': isPlayer,
-          'player-info--right ': !isPlayer,
+          'player-info--right': !isPlayer,
           '!border-red-500 !cursor-pointer shadow-[0_0_15px_5px_rgba(255,0,0,0.7)]': !isPlayer && cardAttackerId && !opponentTaunt && !isStunned && currentTurn === 'player',
         }
       )}
@@ -77,7 +77,8 @@ export function PlayerInfo({ player, typePlayer }: Props) {
             { 
               'player-image--player': isPlayer,
               'player-image--opponent rounded-full': !isPlayer,
-              'shake': !isPlayer && isShaking 
+              'shake': !isPlayer && isShaking,
+              'shake-light': isPlayer && isShaking 
             }
           )}
           src={getHeroImage()}

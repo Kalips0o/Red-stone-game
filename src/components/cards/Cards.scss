@@ -5,8 +5,9 @@
   color: white;
   font-size: 1rem;
   font-weight: bold;
-  z-index: 10;
+  z-index: 1; 
 }
+
 
 .attack {
   position: absolute;
@@ -15,7 +16,7 @@
   color: black;
   font-size: 1rem;
   font-weight: bold;
-  z-index: 10;
+  z-index: 1;
 }
 
 .health {
@@ -25,7 +26,7 @@
   color: white;
   font-size: 1rem;
   font-weight: bold;
-  z-index: 10;
+  z-index: 1; 
 }
 
 .mana-in-hand {
@@ -40,6 +41,7 @@
   font-size: 0.8rem;
 }
 
+
 .dying-card {
   .health {
     color: red;
@@ -49,10 +51,6 @@
   }
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-}
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
