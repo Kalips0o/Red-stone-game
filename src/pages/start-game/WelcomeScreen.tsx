@@ -14,7 +14,7 @@ export const WelcomeScreen = () => {
 
     useEffect(() => {
         const img = new Image();
-        img.src = '/assets/start-img.png'; // Ensure this path is correct
+        img.src = '/assets/start-img.png'; 
         img.onload = () => {
             setIsLoading(false);
         };

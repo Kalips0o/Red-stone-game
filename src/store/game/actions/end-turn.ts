@@ -18,9 +18,9 @@ const updateCardOnTheEndTurn = (deck: IGameCard[]) =>
 export const endTurnAction = (state: IGameStore): Partial<IGameStore> => {
   if (state.isGameOver || state.player.health <= 0 || state.opponent.health <= 0) {
     const winner = state.player.health > 0 ? 'player' : 'opponent';
-    const message = winner === 'player' ? 'You win!' : 'You lose!';
     
-    useNotificationStore.getState().show(message, winner === 'player' ? 'win' : 'lose');
+    
+    useNotificationStore.getState().show( winner === 'player' ? 'win' : 'lose');
     if (winner === 'player') {
       useSoundStore.getState().playWin();
     } else {
