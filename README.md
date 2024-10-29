@@ -1,13 +1,14 @@
-# [Red Stone - A Hearthstone-Inspired Card Game](https://red-stone-game.vercel.app)
-
+<h1 align="center"># [Red Stone ](https://red-stone-game.vercel.app) </h1>
+<br><br/>
+<h2 align="center"># React + TypeScript + Vite </h2>
 **Red Stone** is a card game inspired by the style and mechanics of Hearthstone, built with **React**, **TypeScript**, **Zustand** for state management, **Framer Motion** for animations, **Tailwind CSS** for styling, and **Bun** for bundling. The game is designed as a **Progressive Web App (PWA)**, making it easily installable on both mobile and desktop devices.
 
 ## Features
-- **Core Game Mechanics**: Full interaction functionality between cards, including attack actions and target selection.
-- **Smooth Animations**: Visually engaging animations powered by Framer Motion.
-- **Interactive Game Board**: A dynamic and responsive game board styled with Tailwind CSS.
-- **AI Gameplay**: Engage in battles against a computer opponent, adding depth and challenge to the game.
-- **Card Attack System**: Complete card attack mechanics and target selection on the board.
+⚡ Core Game Mechanics: Full interaction functionality between cards, including attack actions and target selection.
+⚡ Smooth Animations: Visually engaging animations powered by Framer Motion.
+⚡ Interactive Game Board: A dynamic and responsive game board styled with Tailwind CSS.
+⚡ AI Gameplay: Engage in battles against a computer opponent, adding depth and challenge to the game.
+⚡ Card Attack System: Complete card attack mechanics and target selection on the board.
 
 ## Tech Stack
 - **React** and **TypeScript** — providing a typed and component-driven front end.
@@ -16,10 +17,7 @@
 - **Tailwind CSS** — responsive and modern styling for various screen sizes.
 - **Bun** — bundling and dependency management.
 - **PWA** — installable on devices, with offline support.
-
-
 <br><br/>
-
 <img align="center" src="Print1.jpg"/>
 <br><br/>
 <img align="center" src="Print2.jpg"/>
