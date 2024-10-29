@@ -1,13 +1,15 @@
 .mana {
   position: absolute;
-  top: 3%;
-  left: 8.5%;
+  left: 9%;
   color: white;
   font-size: 1rem;
   font-weight: bold;
-  z-index: 1; 
+  z-index: 1;
+  
+  &[data-value="1"] {
+    left: 10%;
+  }
 }
-
 
 .attack {
   position: absolute;
@@ -17,6 +19,10 @@
   font-size: 1rem;
   font-weight: bold;
   z-index: 1;
+  
+  &[data-value="1"] {
+    left: 10%;
+  }
 }
 
 .health {
@@ -26,7 +32,7 @@
   color: white;
   font-size: 1rem;
   font-weight: bold;
-  z-index: 1; 
+  z-index: 1;
 }
 
 .mana-in-hand {
@@ -41,7 +47,6 @@
   font-size: 0.8rem;
 }
 
-
 .dying-card {
   .health {
     color: red;
@@ -50,7 +55,6 @@
     animation: pulse 0.8s infinite;
   }
 }
-
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }

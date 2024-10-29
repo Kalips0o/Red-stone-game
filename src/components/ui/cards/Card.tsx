@@ -76,12 +76,18 @@ export const Card: React.FC<CardStatsProps> = ({
         animate="animate"
       >
         {mana !== undefined && (
-          <div className={`mana absolute top-1 left-1 ${isInHand ? 'mana-in-hand' : ''}`}>
+          <div 
+            className={`mana absolute top-1 ${isInHand ? 'mana-in-hand' : ''}`}
+            data-value={mana}
+          >
             {mana}
           </div>
         )}
         {attack !== undefined && (
-          <div className={`attack absolute bottom-1 left-1 ${isInHand ? 'attack-in-hand' : ''}`}>
+          <div 
+            className={`attack absolute bottom-1 ${isInHand ? 'attack-in-hand' : ''}`}
+            data-value={attack}
+          >
             {attack}
           </div>
         )}

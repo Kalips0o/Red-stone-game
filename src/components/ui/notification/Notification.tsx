@@ -13,13 +13,10 @@ export function Notification() {
 
 	useEffect(() => {
 		if (message) {
-			
 			if (type === 'win' || type === 'lose') {
-				setCurrentMessage(message)
 				setCurrentType(type)
 				setIsVisible(true)
 			} else if (!isVisible) {
-
 				setCurrentMessage(message)
 				setCurrentType(type)
 				setIsVisible(true)
@@ -39,7 +36,7 @@ export function Notification() {
 					exit={{ opacity: 0 }}
 					transition={{ duration: 0.5 }}
 				>
-							<motion.div
+					<motion.div
 						className={cn(
 							'rounded-lg py-2 px-4 w-max font-semibold text-[2rem] shadow-2xl text-gray-800 turn block ',
 							{
@@ -54,10 +51,7 @@ export function Notification() {
 						transition={{ duration: 0.6 }}
 					>
 						{currentType === 'info' && currentMessage}
-						{currentType === 'win' && (
-							<WinConfetti />
-						)}
-						{currentType === 'lose' && currentMessage}
+						{currentType === 'win' && <WinConfetti />}
 					</motion.div>
 				</motion.div>
 			)}

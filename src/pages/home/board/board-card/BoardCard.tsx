@@ -6,7 +6,7 @@ import { useGameStore } from "@/store/game/game.store";
 import { useEnemyTarget } from "./useEnemyTarget";
 import { useSelectAttacker } from "@/store/game/actions/select-attacker";
 import { DamageList } from "../DamageList";
-import { Card } from "@/components/cards/Card";
+import { Card } from "@/components/ui/cards/Card";
 import { useRemoveCardStore } from "@/store/game/actions/attack-card";
 import { useNotificationStore } from "@/store/notiffication/notification.store";
 import { useSoundStore } from "@/store/game/actions/hero-attack";

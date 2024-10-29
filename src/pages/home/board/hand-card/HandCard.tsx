@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { getStyleRotation } from '@/pages/home/board/hand-card/get-style-rotation.ts';
 import type { ICard } from '@/card.types';
 import { useGameStore } from '@/store/game/game.store';
-import { Card } from '@/components/cards/Card';
+import { Card } from '@/components/ui/cards/Card';
 
 interface Props {
   card: ICard;

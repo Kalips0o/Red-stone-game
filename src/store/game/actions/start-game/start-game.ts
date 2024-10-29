@@ -3,6 +3,8 @@ import { createDeck } from "../../create-deck"; // Функция для соз�
 import { type IGameCard, type IGameStore } from "../../game.types"; // Типы для карт и состояния игры
 import { initialGameData } from "../initial-data"; // Начальные данные игры
 import shuffle from 'lodash/shuffle'; // Функция для перемешивания массива
+import { useSelectAttacker } from "../select-attacker"; // Добавляем импорт
+import { useAttackedCardStore } from '../attacked-card'; // Добавляем импорт для полной очистки состояний
 
 // Функция для получения первых карт в руке игрока
 const getFirstCards = (deck: IGameCard[]): IGameCard[] =>
@@ -14,6 +16,10 @@ const getFirstCards = (deck: IGameCard[]): IGameCard[] =>
 
 // Основная функция для начала игры
 export const startGameAction = (): Partial<IGameStore> => {
+  // Сбрасываем состояния атакующей карты и атакованной карты
+  useSelectAttacker.getState().setCardAttackerId(null);
+  useAttackedCardStore.getState().setAttackedCardId(null);
+
   // Создаем и перемешиваем колоды для игрока и противника
   const playerInitialDeck = shuffle(createDeck('player'));
   const opponentInitialDeck = shuffle(createDeck('opponent'));
