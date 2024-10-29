@@ -1,15 +1,15 @@
-import { MAX_HAND_CARDS } from "@/constants/game/core.constants"; // Максимальное количество карт на руке
-import { createDeck } from "../../create-deck"; // Функция для создания колоды карт
-import { type IGameCard, type IGameStore } from "../../game.types"; // Типы для карт и состояния игры
-import { initialGameData } from "../initial-data"; // Начальные данные игры
-import shuffle from 'lodash/shuffle'; // Функция для перемешивания массива
-import { useSelectAttacker } from "../select-attacker"; // Добавляем импорт
-import { useAttackedCardStore } from '../attacked-card'; // Добавляем импорт для полной очистки состояний
+import { MAX_HAND_CARDS } from "@/constants/game/core.constants";
+import { createDeck } from "../../create-deck";
+import { type IGameCard, type IGameStore } from "../../game.types";
+import { initialGameData } from "../initial-data";
+import shuffle from 'lodash/shuffle';
+import { useSelectAttacker } from "../select-attacker";
+import { useAttackedCardStore } from '../attacked-card';
 
 // Функция для получения первых карт в руке игрока
 const getFirstCards = (deck: IGameCard[]): IGameCard[] =>
   deck.map((card, index) => ({
-    ...card, // Копируем свойства карты
+    ...card,
     isOnHand: index < MAX_HAND_CARDS, // Устанавливаем, находится ли карта на руке
     isTaken: index < MAX_HAND_CARDS, // Устанавливаем, была ли карта взята
   }));
@@ -25,7 +25,7 @@ export const startGameAction = (): Partial<IGameStore> => {
   const opponentInitialDeck = shuffle(createDeck('opponent'));
 
   return {
-    ...initialGameData, // Возвращаем начальные данные игры
+    ...initialGameData,
     player: {
       ...initialGameData.player, // Копируем начальные данные игрока
       deck: getFirstCards(playerInitialDeck), // Устанавливаем начальные карты на руке игрока

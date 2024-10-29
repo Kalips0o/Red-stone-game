@@ -1,7 +1,8 @@
+import React from "react";
 import cn from 'clsx';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
-
 import styles from './Button.module.scss';
+
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactNode;

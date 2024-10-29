@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import './EducationalNotice.scss';
 
-interface EducationaNoticeProps {
+interface EducationalNoticeProps {
   text: string;
 }
 
-export function EducationalNotice({ text }:EducationaNoticeProps) {
+export function EducationalNotice({ text }:EducationalNoticeProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
