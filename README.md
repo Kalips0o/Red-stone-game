@@ -17,6 +17,14 @@
 - **Bun** — bundling and dependency management.
 - **PWA** — installable on devices, with offline support.
 
+
+<br><br/>
+
+<img align="center" src="Print1.jpg"/>
+<br><br/>
+<img align="center" src="Print2.jpg"/>
+<br><br/>
+
 ## Installation and Setup
 1. Clone the repository:
     ```bash
@@ -31,13 +39,6 @@
     ```bash
     bun run dev
     ```
-<br><br/>
-
-<img align="center" src="Print1.jpg"/>
-<br><br/>
-<img align="center" src="Print2.jpg"/>
-<br><br/>
-
 
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
